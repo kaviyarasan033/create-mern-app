@@ -9,6 +9,8 @@
   "files": [
     "bin",
     "templates",
+    "templates/server/.env",
+    "templates/client/.env",
     "README.md"
   ],
   "scripts": {

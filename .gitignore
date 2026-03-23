@@ -7,8 +7,5 @@ create-mern-app/node_modules/
 create-mern-app/templates/*/node_modules/
 dist/
 build/
-.env
 *.tgz
 coverage/
-templates/server/.env
-templates/client/.env

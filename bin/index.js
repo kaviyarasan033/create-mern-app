@@ -36,6 +36,21 @@ try {
   fs.copySync(templateDir, targetDir);
   console.log(chalk.green('✓ Copied project template'));
 
+  const serverEnvExample = path.join(targetDir, 'server', '.env.example');
+  const serverEnv = path.join(targetDir, 'server', '.env');
+  const clientEnvExample = path.join(targetDir, 'client', '.env.example');
+  const clientEnv = path.join(targetDir, 'client', '.env');
+
+  if (fs.existsSync(serverEnvExample) && !fs.existsSync(serverEnv)) {
+    fs.copySync(serverEnvExample, serverEnv);
+  }
+
+  if (fs.existsSync(clientEnvExample) && !fs.existsSync(clientEnv)) {
+    fs.copySync(clientEnvExample, clientEnv);
+  }
+
+  console.log(chalk.green('✓ Created default .env files for client and server'));
+
   // 📦 INSTALL DEPENDENCIES
   console.log(chalk.blue.bold('\n📦 Installing dependencies (this may take a minute)...\n'));
 

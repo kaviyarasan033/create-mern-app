@@ -1,0 +1,7 @@
+node_modules/
+.git/
+*.tgz
+coverage/
+
+!templates/server/.env
+!templates/client/.env
