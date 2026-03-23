@@ -2,11 +2,11 @@ import React from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { FaBookOpen, FaBoxesStacked, FaRightFromBracket, FaRocket } from 'react-icons/fa6';
 
 const AppNavbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -14,19 +14,20 @@ const AppNavbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Navbar bg="dark" variant="dark" expand="lg" className="premium-navbar shadow">
+      <Navbar expand="lg" className="premium-navbar">
         <Container>
-          <Navbar.Brand as={Link} to="/" className="fw-bold">
-            <span className="text-primary">Pro</span>App MVC
+          <Navbar.Brand as={Link} to="/" className="fw-bold brand-mark">
+            <FaRocket /> <span>MERN Command Center</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto align-items-center">
+              <Nav.Link as={Link} to="/docs"> <FaBookOpen /> Docs</Nav.Link>
               {isAuthenticated ? (
                 <>
-                  <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
-                  <span className="text-light mx-3">Hello, {user?.name}</span>
-                  <Button variant="outline-primary" size="sm" onClick={logout}>Logout</Button>
+                  <Nav.Link as={Link} to="/dashboard"><FaBoxesStacked /> Dashboard</Nav.Link>
+                  <span className="nav-user-pill">Hello, {user?.name}</span>
+                  <Button variant="outline-light" size="sm" onClick={logout}><FaRightFromBracket /> Logout</Button>
                 </>
               ) : (
                 <>

@@ -8,6 +8,7 @@ const errorHandler = require('./middleware/errorMiddleware');
 const dbCheck = require('./middleware/dbCheck');
 const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api');
+const metaRoutes = require('./routes/meta');
 
 const app = express();
 
@@ -22,21 +23,30 @@ app.use((req, res, next) => {
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: Number(process.env.RATE_LIMIT_MAX || 100) // limit each IP to 100 requests per windowMs
 });
 app.use('/api/', limiter);
 
 // Standard Middleware
-app.use(cors());
+app.use(cors({
+  origin: (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:3000').split(',')
+}));
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => res.send('Secure ProApp API is running...'));
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'MERN MVC API is running',
+    docs: '/api/meta'
+  });
+});
 
 // Database Health Check
 app.use('/api', dbCheck);
 
 // API Routes
+app.use('/api/meta', metaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/items', apiRoutes);
 

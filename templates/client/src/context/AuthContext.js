@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/apiService';
 
 const AuthContext = createContext();
 
@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.defaults.headers.common['x-auth-token'] = token;
       checkAuth();
     } else {
       setLoading(false);
@@ -19,11 +18,10 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const res = await axios.get('/api/auth/me');
+      const res = await api.get('/api/auth/me');
       setUser(res.data.data);
     } catch (err) {
       localStorage.removeItem('token');
-      delete axios.defaults.headers.common['x-auth-token'];
     } finally {
       setLoading(false);
     }
@@ -31,13 +29,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (token, userData) => {
     localStorage.setItem('token', token);
-    axios.defaults.headers.common['x-auth-token'] = token;
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    delete axios.defaults.headers.common['x-auth-token'];
     setUser(null);
   };
 

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Container, Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
+import { FaIdCard, FaUserPlus } from 'react-icons/fa6';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -30,7 +31,7 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-shell register-shell">
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -38,7 +39,9 @@ const Register = () => {
       >
         <Card className="auth-card">
           <Card.Body>
-            <h2 className="text-center mb-4 fw-bold">Sign Up</h2>
+            <div className="card-icon"><FaUserPlus /></div>
+            <h2 className="mb-3 fw-bold">Create account</h2>
+            <p className="auth-subtitle">Start with a secure JWT flow and a Mongo-ready backend.</p>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <Form.Label>Full Name</Form.Label>
@@ -80,9 +83,9 @@ const Register = () => {
                 Create Account
               </Button>
             </Form>
-            <div className="text-center mt-3 opacity-75">
-              <span>Already have an account? </span>
-              <Link to="/" className="text-white fw-bold">Login</Link>
+            <div className="auth-links">
+              <span>Already have an account? <Link to="/">Login</Link></span>
+              <span><FaIdCard /> MVC auth ready</span>
             </div>
           </Card.Body>
         </Card>

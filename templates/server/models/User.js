@@ -5,9 +5,8 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
-  created_at: { type: Date, default: Date.now }
-});
+  role: { type: String, enum: ['user', 'admin'], default: 'user' }
+}, { timestamps: true });
 
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
@@ -15,5 +14,15 @@ UserSchema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+
+UserSchema.methods.toSafeObject = function() {
+  return {
+    id: this._id,
+    name: this.name,
+    email: this.email,
+    role: this.role,
+    createdAt: this.createdAt
+  };
+};
 
 module.exports = mongoose.model('User', UserSchema);

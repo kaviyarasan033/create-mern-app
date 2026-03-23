@@ -1,23 +1,28 @@
 {
-  "name": "create-react-proapp",
-  "version": "1.2.7",
-  "description": "Create a full-stack React + Node.js project with one command",
+  "name": "create-mern-app",
+  "version": "2.0.0",
+  "description": "Create a production-ready MERN stack MVC project with one command",
   "bin": {
+    "create-mern-app": "./bin/index.js",
     "create-react-proapp": "./bin/index.js"
   },
+  "files": [
+    "bin",
+    "templates",
+    "README.md"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "mern",
+    "mongodb",
     "react",
     "node",
     "express",
     "mvc",
-    "laravel",
     "boilerplate",
     "generator",
-    "bootstrap",
-    "framer-motion",
     "security"
   ],
   "author": "Kaviyarasan",

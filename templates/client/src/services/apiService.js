@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL || '',
-  timeout: 10000,
+  timeout: Number(process.env.REACT_APP_API_TIMEOUT || 10000),
 });
 
 // Request interceptor for tokens

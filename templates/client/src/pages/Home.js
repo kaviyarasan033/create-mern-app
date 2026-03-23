@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Container, Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
+import { FaArrowRight, FaKey, FaLock, FaUserShield } from 'react-icons/fa6';
 
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -31,20 +32,42 @@ const Home = () => {
   };
 
   return (
-    <div className="auth-container">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+    <div className="auth-shell">
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="auth-grid"
       >
+        <div className="auth-copy">
+          <span className="eyebrow">Built-in MERN starter</span>
+          <h1>Ship login, routes, controllers, and docs from day one.</h1>
+          <p>
+            This starter includes JWT auth, MVC folders, a docs endpoint, and generator commands for rapid MERN development.
+          </p>
+          <div className="feature-list">
+            <span><FaUserShield /> JWT auth flow</span>
+            <span><FaKey /> Demo login seed</span>
+            <span><FaArrowRight /> Built-in migration commands</span>
+          </div>
+          <div className="demo-credentials">
+            <strong>Default demo login</strong>
+            <span>`demo@mernkit.dev`</span>
+            <span>`Password123!`</span>
+            <small>Run `cd server && npm run seed:demo` first.</small>
+          </div>
+        </div>
+
         <Card className="auth-card">
           <Card.Body>
-            <h2 className="text-center mb-4 fw-bold">Login</h2>
+            <div className="card-icon"><FaLock /></div>
+            <h2 className="mb-3 fw-bold">Login</h2>
+            <p className="auth-subtitle">Sign in to manage your starter data and test protected routes.</p>
             <Form onSubmit={handleLogin}>
               <Form.Group className="mb-3">
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control 
-                  type="email" 
+                <Form.Control
+                  type="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -53,8 +76,8 @@ const Home = () => {
               </Form.Group>
               <Form.Group className="mb-4">
                 <Form.Label>Password</Form.Label>
-                <Form.Control 
-                  type="password" 
+                <Form.Control
+                  type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -65,13 +88,13 @@ const Home = () => {
                 Sign In
               </Button>
             </Form>
-            <div className="text-center mt-3 opacity-75">
-              <span>New here? </span>
-              <Link to="/register" className="text-white fw-bold">Create an account</Link>
+            <div className="auth-links">
+              <span>New here? <Link to="/register">Create an account</Link></span>
+              <Link to="/docs">Read starter docs</Link>
             </div>
           </Card.Body>
         </Card>
-      </motion.div>
+      </motion.section>
     </div>
   );
 };

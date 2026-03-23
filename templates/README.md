@@ -1,36 +1,49 @@
-# Your ProApp MVC Project 🚀
+# Your MERN MVC Project
 
-This project was generated with `create-react-proapp`.
+This project was generated with `create-mern-app`.
 
-## 📂 Project Structure
+## What Is Included
 
-- `server/controllers` - Request logic.
-- `server/models`      - Database schemas.
-- `server/routes`      - API endpoints.
-- `server/middleware`  - Auth & validation.
-- `server/database`    - Migrations.
-- `client/src`         - React frontend with AuthContext.
+- `server/controllers` - MVC request handlers.
+- `server/models` - MongoDB schemas.
+- `server/routes` - REST API endpoints.
+- `server/middleware` - auth, validation, and error handling.
+- `server/scripts` - demo login seed and MERN migration helper.
+- `client/src` - React frontend with auth context, docs page, and icon-based UI.
 
-## 🛠️ CLI Commands (ProApp CLI)
+## CLI Commands
 
-We've included a custom CLI tool for fast development:
+Use the built-in `proapp.js` helper from the project root:
 
-- **Create Controller**: `node proapp make:controller MyController`
-- **Create Model**: `node proapp make:model MyModel`
-- **Create Middleware**: `node proapp make:middleware MyMiddleware`
-- **Automated Install**: Handled by the generator!
+- `node proapp make:controller Project`
+- `node proapp make:model Project`
+- `node proapp make:middleware auditLog`
+- `node proapp make:route projects`
+- `node proapp docs`
+- `node proapp migrate:mern`
 
-## 🚀 Getting Started
+## Default Demo Login
 
-1. **Setup Env**: Copy `server/.env.example` to `server/.env` and add your keys.
-2. **Start Backend**: `cd server && npm run dev`
-3. **Start Frontend**: `cd client && npm start`
+Run `cd server && npm run seed:demo` and use:
 
-## ✨ Advanced Features Included
-- **JWT Auth**: Full registration and login flow.
-- **Global Toast**: Centered notifications ready.
-- **Docker Support**: `docker-compose up` to run everything.
-- **Logger**: Winston logging in production.
-- **Health Checks**: API monitoring middleware.
+- Email: `demo@mernkit.dev`
+- Password: `Password123!`
 
-Happy coding! 🎊
+## Routes And Controllers
+
+- Auth routes live in `server/routes/auth.js` and call `server/controllers/authController.js`.
+- Item routes live in `server/routes/api.js` and call `server/controllers/ItemController.js`.
+- Meta/docs route lives in `server/routes/meta.js` and returns route + command documentation from the API.
+
+## Getting Started
+
+1. Copy `server/.env.example` to `server/.env` and `client/.env.example` to `client/.env`.
+2. Start backend: `cd server && npm run dev`
+3. Start frontend: `cd client && npm start`
+4. Open the docs page in the app or read `MERN_GUIDE.md`.
+
+## MERN Migration Help
+
+Run `node proapp migrate:mern` for the command checklist and `npm run migrate:mern` in `server/` for backend migration notes.
+
+Happy coding.

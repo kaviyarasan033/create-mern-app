@@ -13,8 +13,8 @@ class AuthController extends Controller {
       user = new User({ name, email, password });
       await user.save();
 
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-      this.sendResponse(res, { token, user: { id: user._id, name, email } }, 'Registration successful', 201);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '30d' });
+      this.sendResponse(res, { token, user: user.toSafeObject() }, 'Registration successful', 201);
     } catch (err) {
       this.sendError(res, err);
     }
@@ -29,8 +29,8 @@ class AuthController extends Controller {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return this.sendError(res, 'Invalid credentials', 400);
 
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-      this.sendResponse(res, { token, user: { id: user._id, name: user.name, email: user.email } }, 'Login successful');
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '30d' });
+      this.sendResponse(res, { token, user: user.toSafeObject() }, 'Login successful');
     } catch (err) {
       this.sendError(res, err);
     }
@@ -42,8 +42,9 @@ class AuthController extends Controller {
 
   async getCurrentUser(req, res) {
     try {
-      const user = await User.findById(req.user.id).select('-password');
-      this.sendResponse(res, user, 'Current user fetched');
+      const user = await User.findById(req.user.id);
+      if (!user) return this.notFound(res, 'User not found');
+      this.sendResponse(res, user.toSafeObject(), 'Current user fetched');
     } catch (err) {
       this.sendError(res, err);
     }

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Badge } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/apiService';
 import toast from 'react-hot-toast';
 import Spinner from '../components/Spinner';
+import { FaCirclePlus, FaCodeBranch, FaTrash } from 'react-icons/fa6';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({ name: '', description: '', status: 'active' });
 
   useEffect(() => {
     fetchItems();
@@ -26,27 +28,110 @@ const Dashboard = () => {
     }
   };
 
+  const handleCreateItem = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await api.post('/api/items', formData);
+      setItems((current) => [res.data.data, ...current]);
+      setFormData({ name: '', description: '', status: 'active' });
+      toast.success('Item created');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to create item');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/api/items/${id}`);
+      setItems((current) => current.filter((item) => item._id !== id));
+      toast.success('Item deleted');
+    } catch (err) {
+      toast.error('Failed to delete item');
+    }
+  };
+
   return (
     <Container className="dashboard-container">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-      >
-        <Row className="mb-4 align-items-center">
-          <Col>
-            <h1 className="fw-bold">My Items</h1>
-            <p className="text-muted">Manage your professional catalog</p>
-          </Col>
-          <Col xs="auto">
-            <Button variant="primary" onClick={fetchItems}>Refresh</Button>
-          </Col>
-        </Row>
+        >
+          <Row className="mb-4 align-items-center">
+            <Col>
+              <span className="eyebrow">Protected MERN workspace</span>
+              <h1 className="fw-bold">Welcome, {user?.name}</h1>
+              <p className="text-muted mb-0">Create data, test controllers, and verify protected routes from one dashboard.</p>
+            </Col>
+            <Col xs="auto">
+              <div className="dashboard-actions">
+                <Button variant="outline-secondary" onClick={fetchItems}>Refresh</Button>
+                <Button variant="outline-danger" onClick={logout}>Logout</Button>
+              </div>
+            </Col>
+          </Row>
 
-        <hr className="mb-5 opacity-10" />
+          <Row className="g-4 mb-4">
+            <Col lg={5}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="panel-heading"><FaCirclePlus /> Create item</div>
+                  <Form onSubmit={handleCreateItem}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Starter task"
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="What should this resource describe?"
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-4">
+                      <Form.Label>Status</Form.Label>
+                      <Form.Select
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                      >
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                        <option value="archived">Archived</option>
+                      </Form.Select>
+                    </Form.Group>
+                    <Button type="submit" className="w-100">Create</Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
 
-        {loading ? (
-          <div className="d-flex justify-content-center py-5">
+            <Col lg={7}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="panel-heading"><FaCodeBranch /> Starter commands</div>
+                  <div className="command-list">
+                    <code>node proapp make:controller Project</code>
+                    <code>node proapp make:model Project</code>
+                    <code>node proapp make:route projects</code>
+                    <code>cd server && npm run migrate:mern</code>
+                    <code>cd server && npm run seed:demo</code>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          {loading ? (
+            <div className="d-flex justify-content-center py-5">
             <Spinner size="large" />
           </div>
         ) : (
@@ -59,15 +144,19 @@ const Dashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Card className="item-card h-100 shadow-sm border-0">
+                    <Card className="item-card h-100 border-0">
                       <Card.Body>
-                        <Card.Title className="fw-bold mb-3">{item.name}</Card.Title>
+                        <div className="item-card-head">
+                          <Card.Title className="fw-bold mb-0">{item.name}</Card.Title>
+                          <Badge bg="light" text="dark">{item.status}</Badge>
+                        </div>
                         <Card.Text className="text-muted">
                           {item.description || 'No description provided.'}
                         </Card.Text>
                       </Card.Body>
-                      <Card.Footer className="bg-transparent border-0 pt-0">
-                        <small className="text-muted">Created: {new Date(item.created_at).toLocaleDateString()}</small>
+                      <Card.Footer className="bg-transparent border-0 pt-0 d-flex justify-content-between align-items-center">
+                        <small className="text-muted">Created: {new Date(item.createdAt).toLocaleDateString()}</small>
+                        <Button variant="link" className="icon-button" onClick={() => handleDelete(item._id)}><FaTrash /></Button>
                       </Card.Footer>
                     </Card>
                   </motion.div>
@@ -75,9 +164,9 @@ const Dashboard = () => {
               ))
             ) : (
               <Col xs={12} className="text-center py-5">
-                <div className="empty-state p-5 rounded-4 bg-white shadow-sm border">
+                <div className="empty-state p-5 rounded-4">
                   <h3>No items yet</h3>
-                  <p className="text-muted">Start by creating your first item via the API or proapp CLI.</p>
+                  <p className="text-muted">Create your first item here or seed demo data from `server/scripts/seedDemo.js`.</p>
                 </div>
               </Col>
             )}

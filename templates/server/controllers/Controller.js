@@ -14,6 +14,14 @@ class Controller {
       message
     });
   }
+
+  notFound(res, message = 'Resource not found') {
+    return this.sendError(res, message, 404);
+  }
+
+  unauthorized(res, message = 'Unauthorized') {
+    return this.sendError(res, message, 401);
+  }
 }
 
 module.exports = Controller;
