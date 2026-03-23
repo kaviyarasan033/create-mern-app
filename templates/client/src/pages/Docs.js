@@ -21,7 +21,7 @@ function Docs() {
   }, []);
 
   const commandGroups = useMemo(() => {
-    if (!meta?.commands) {
+    if (!Array.isArray(meta?.commands)) {
       return [];
     }
 
@@ -36,6 +36,12 @@ function Docs() {
 
     return Object.entries(grouped);
   }, [meta]);
+
+  const gettingStarted = Array.isArray(meta?.gettingStarted) ? meta.gettingStarted : [];
+  const routes = Array.isArray(meta?.routes) ? meta.routes : [];
+  const controllers = Array.isArray(meta?.controllers) ? meta.controllers : [];
+  const backendScripts = Array.isArray(meta?.backendScripts) ? meta.backendScripts : [];
+  const integration = Array.isArray(meta?.integration) ? meta.integration : [];
 
   const copyCommand = async (value) => {
     try {
@@ -80,7 +86,7 @@ function Docs() {
         <section id="getting-started" className="docs-section">
           <div className="section-heading">{iconMap.start} Getting started</div>
           <Row className="g-4">
-            {meta?.gettingStarted?.map((step) => (
+            {gettingStarted.map((step) => (
               <Col key={step.command} md={6}>
                 <Card className="panel-card h-100">
                   <Card.Body>
@@ -133,7 +139,7 @@ function Docs() {
           <Card className="panel-card">
             <Card.Body>
               <div className="docs-list">
-                {meta?.routes?.map((route) => (
+                {routes.map((route) => (
                   <div key={`${route.method}-${route.path}`} className="route-card">
                     <div>
                       <code>{route.method}</code> <span>{route.path}</span>
@@ -155,7 +161,7 @@ function Docs() {
                 <Card.Body>
                   <div className="panel-heading">Controllers</div>
                   <div className="docs-list">
-                    {meta?.controllers?.map((controller) => (
+                    {controllers.map((controller) => (
                       <div key={controller.name}>
                         <strong>{controller.name}</strong>
                         <small>{controller.methods}</small>
@@ -171,7 +177,7 @@ function Docs() {
                 <Card.Body>
                   <div className="panel-heading">Server scripts</div>
                   <div className="docs-list">
-                    {meta?.backendScripts?.map((script) => (
+                    {backendScripts.map((script) => (
                       <div key={script.name}>
                         <code>{script.name}</code>
                         <p>{script.description}</p>
@@ -187,7 +193,7 @@ function Docs() {
         <section id="integration" className="docs-section">
           <div className="section-heading">{iconMap.generators} Integration guide</div>
           <Row className="g-4">
-            {meta?.integration?.map((item) => (
+            {integration.map((item) => (
               <Col key={item.command} md={6}>
                 <Card className="panel-card h-100">
                   <Card.Body>
