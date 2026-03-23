@@ -1,6 +1,6 @@
 {
   "name": "create-react-proapp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Create a full-stack React + Node.js project with one command",
   "bin": {
     "create-react-proapp": "./bin/index.js"

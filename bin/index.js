@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
+const { execSync } = require('child_process');
 
 // Get the folder name from command line argument
 const folderName = process.argv[2];
@@ -35,6 +36,19 @@ try {
   fs.copySync(templateDir, targetDir);
   console.log(chalk.green('✓ Copied project template'));
 
+  // 📦 INSTALL DEPENDENCIES
+  console.log(chalk.blue.bold('\n📦 Installing dependencies (this may take a minute)...\n'));
+
+  // Install Server Dependencies
+  console.log(chalk.yellow('  → Installing backend dependencies...'));
+  execSync('npm install', { cwd: path.join(targetDir, 'server'), stdio: 'inherit' });
+  console.log(chalk.green('  ✓ Backend dependencies installed'));
+
+  // Install Client Dependencies
+  console.log(chalk.yellow('\n  → Installing frontend dependencies...'));
+  execSync('npm install', { cwd: path.join(targetDir, 'client'), stdio: 'inherit' });
+  console.log(chalk.green('  ✓ Frontend dependencies installed'));
+
   // Display next steps
   console.log(chalk.blue.bold('\n✨ Project created successfully!\n'));
   console.log(chalk.cyan('📁 Project structure:'));
@@ -62,16 +76,10 @@ try {
   console.log(chalk.white(`1. Navigate to your project:`));
   console.log(chalk.yellow(`   cd ${folderName}\n`));
 
-  console.log(chalk.white(`2. Install backend dependencies:`));
-  console.log(chalk.yellow(`   cd server && npm install\n`));
+  console.log(chalk.white(`2. Create .env files (copied automatically, just edit if needed):\n`));
 
-  console.log(chalk.white(`3. Install frontend dependencies:`));
-  console.log(chalk.yellow(`   cd ../client && npm install\n`));
-
-  console.log(chalk.white(`4. Create .env files (use .env.example as reference):\n`));
-
-  console.log(chalk.white(`5. Start development servers:\n`));
-  console.log(chalk.yellow(`   Terminal 1 (Backend):  cd server && npm start`));
+  console.log(chalk.white(`3. Start development servers:\n`));
+  console.log(chalk.yellow(`   Terminal 1 (Backend):  cd server && npm run dev`));
   console.log(chalk.yellow(`   Terminal 2 (Frontend): cd client && npm start\n`));
 
   console.log(chalk.green.bold(`Happy coding! 🎉\n`));
