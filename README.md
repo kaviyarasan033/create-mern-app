@@ -1,88 +1,50 @@
-# create-mern-app
+# create-mern-proapp
 
-Create a production-ready MERN stack app with Express MVC, MongoDB models, React auth screens, built-in CLI generators, and migration guidance.
-
-## Features
-
-- Express MVC backend with controllers, models, middleware, and route docs.
-- React frontend with login, register, dashboard, and built-in icon-based UI.
-- JWT auth flow with protected routes and demo seed command.
-- Mongoose-ready MongoDB setup for a clean MERN migration path.
-- Built-in `proapp` generator commands for controllers, models, middleware, and routes.
-- Project docs that explain routes, controllers, default demo login, and migration commands.
+Create a production-ready MERN stack app with Express MVC, MongoDB models, React auth screens, backend scaffold commands, and migration helpers.
 
 ## Quick Start
 
-Build your next big project in seconds:
-
 ```bash
-npx create-mern-app my-amazing-app
+npx create-mern-proapp my-amazing-app
 ```
 
-Legacy alias still works:
+After generation, developers can use the built-in project CLI and server scripts to scaffold backend files and follow MERN migration steps.
+
+## Generated Backend Commands
 
 ```bash
-npx create-react-proapp my-amazing-app
-```
-
-## Setup
-
-1. **Navigate to your new project**:
-   ```bash
-   cd my-amazing-app
-   ```
-
-2. **Setup Backend**:
-    ```bash
-    cd server
-    npm install
-    copy .env.example .env
-    npm run dev
-    ```
-
-3. **Setup Frontend**:
-   ```bash
-   cd ../client
-   npm install
-   npm start
-   ```
-
-4. **Seed demo login (optional)**:
-   ```bash
-   cd ../server
-   npm run seed:demo
-   ```
-
-## Project Structure
-
-```text
-my-amazing-app/
-├── client/          (React Frontend)
-│   ├── src/pages/   (Login, Register, Dashboard, Docs)
-│   └── src/styles/  (Custom branded UI)
-└── server/          (Express Backend)
-    ├── controllers/ (MVC request handlers)
-    ├── middleware/  (Auth, validation, errors)
-    ├── models/      (MongoDB schemas)
-    ├── routes/      (REST API endpoints)
-    └── scripts/     (demo seed + MERN migration helpers)
-```
-
-## Included Commands
-
-```bash
+node proapp help
 node proapp make:controller Project
 node proapp make:model Project
 node proapp make:middleware auditTrail
-node proapp make:route project
-node proapp docs
-node proapp migrate:mern
+node proapp make:route projects
+node proapp make:config cache
+node proapp make:resource project
+node proapp mern:migrate ProjectController.js
 ```
+
+## Generated Server Scripts
+
+```bash
+cd server && npm run mern:start
+cd server && npm run mern:docs
+cd server && npm run mern:migrate -- ProjectController.js
+cd server && npm run seed:demo
+```
+
+## Docs And Integration
+
+- `/docs` page with sidebar navigation, getting-started steps, copy buttons, and route references.
+- `GET /api/meta` endpoint for command and integration metadata.
+- `MERN_GUIDE.md` and generated `README.md` inside the scaffolded project.
+
+## Included Features
+
+- Express MVC backend with controllers, models, middleware, routes, and config helpers.
+- React frontend with login, register, dashboard, and built-in docs experience.
+- JWT auth flow with protected routes and demo seed command.
+- MERN migration help for controllers, models, routes, auth, and environment setup.
 
 ## License
 
 MIT
-
----
-
-Built for developers who want an all-in-one MERN starting point.

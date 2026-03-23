@@ -1,5 +1,20 @@
 # MERN Guide
 
+## Installation
+
+```bash
+cd server && npm install
+cd ../client && npm install
+```
+
+## Getting Started
+
+```bash
+cd server && npm run mern:start
+cd server && npm run dev
+cd ../client && npm start
+```
+
 ## API Routes
 
 - `POST /api/auth/register` - create a user account.
@@ -10,50 +25,56 @@
 - `POST /api/items` - create an item.
 - `PUT /api/items/:id` - update an item.
 - `DELETE /api/items/:id` - delete an item.
-- `GET /api/meta` - built-in route and command documentation.
+- `GET /api/meta` - built-in route, command, and integration documentation.
 
 ## Controllers
 
 - `server/controllers/authController.js` handles register, login, logout, and current-user requests.
 - `server/controllers/ItemController.js` handles item CRUD in MVC style.
-- `server/controllers/MetaController.js` exposes docs to the frontend and API consumers.
+- `server/controllers/MetaController.js` exposes docs, command groups, and integration notes.
 - `server/controllers/Controller.js` keeps response formatting consistent.
 
-## Default Demo Login
+## Backend Generator Commands
 
-Seed the demo account first:
+```bash
+node proapp help
+node proapp docs
+node proapp make:controller Project
+node proapp make:model Project
+node proapp make:middleware auditTrail
+node proapp make:route projects
+node proapp make:config cache
+node proapp make:resource project
+```
+
+## MERN Migration Commands
+
+Use these when you are moving an older backend into this structure:
+
+```bash
+cd server && npm run mern:docs
+cd server && npm run mern:migrate -- ProjectController.js
+node proapp mern:migrate ProjectController.js
+```
+
+`npm run mern:migrate -- ProjectController.js` prints a targeted checklist for models, controllers, routes, auth, environment setup, and follow-up docs.
+
+## Demo Login
 
 ```bash
 cd server
 npm run seed:demo
 ```
 
-Credentials:
-
 - Email: `demo@mernkit.dev`
 - Password: `Password123!`
 
-## Built-In Commands
+## Frontend Docs Page
 
-```bash
-node proapp make:controller Project
-node proapp make:model Project
-node proapp make:middleware auditTrail
-node proapp make:route projects
-node proapp docs
-node proapp migrate:mern
-```
+Open `/docs` in the generated client to see:
 
-## MERN Migration Commands
-
-If you are moving an older project into this structure, use this sequence:
-
-```bash
-npm install
-cd server && npm install
-cd ../client && npm install
-cd ../server && npm run migrate:mern
-cd ../client && npm start
-```
-
-`npm run migrate:mern` prints the backend checklist for models, controllers, routes, auth, and environment setup.
+- sidebar navigation
+- copy buttons for commands
+- installation and getting-started commands
+- backend integration steps
+- route and controller references

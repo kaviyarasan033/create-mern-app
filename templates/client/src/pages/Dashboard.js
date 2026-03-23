@@ -121,8 +121,11 @@ const Dashboard = () => {
                   <div className="command-list">
                     <code>node proapp make:controller Project</code>
                     <code>node proapp make:model Project</code>
+                    <code>node proapp make:config cache</code>
+                    <code>node proapp make:resource project</code>
                     <code>node proapp make:route projects</code>
-                    <code>cd server && npm run migrate:mern</code>
+                    <code>cd server && npm run mern:docs</code>
+                    <code>cd server && npm run mern:migrate -- ProjectController.js</code>
                     <code>cd server && npm run seed:demo</code>
                   </div>
                 </Card.Body>

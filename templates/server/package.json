@@ -1,5 +1,5 @@
 {
-  "name": "your-app-server",
+  "name": "create-mern-app",
   "version": "1.0.0",
   "description": "MERN MVC backend",
   "main": "server.js",
@@ -8,7 +8,11 @@
     "dev": "nodemon server.js",
     "test": "node --test",
     "seed:demo": "node scripts/seedDemo.js",
-    "migrate:mern": "node scripts/migrateToMern.js"
+    "migrate:mern": "node scripts/migrateToMern.js",
+    "mern:migrate": "node scripts/migrateToMern.js",
+    "mern:start": "node scripts/mernStart.js",
+    "mern:docs": "node scripts/backendDocs.js",
+    "mern:help": "node scripts/backendDocs.js"
   },
   "dependencies": {
     "express": "^4.18.2",

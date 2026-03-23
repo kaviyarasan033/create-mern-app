@@ -10,8 +10,8 @@ const folderName = process.argv[2];
 
 if (!folderName) {
   console.log(chalk.red('❌ Error: Please specify a project name'));
-  console.log(chalk.yellow('\nUsage: npx create-mern-app <folder-name>'));
-  console.log(chalk.cyan('\nExample: npx create-mern-app my-awesome-app'));
+  console.log(chalk.yellow('\nUsage: npx create-mern-proapp <folder-name>'));
+  console.log(chalk.cyan('\nExample: npx create-mern-proapp my-awesome-app'));
   process.exit(1);
 }
 
@@ -121,8 +121,12 @@ try {
   console.log(chalk.white(`5. Use the ProApp CLI (Inside project root):\n`));
   console.log(chalk.yellow(`   node proapp make:controller MyController`));
   console.log(chalk.yellow(`   node proapp make:model MyModel`));
+  console.log(chalk.yellow(`   node proapp make:config cache`));
+  console.log(chalk.yellow(`   node proapp make:resource project`));
   console.log(chalk.yellow(`   node proapp make:route my-resource`));
-  console.log(chalk.yellow(`   node proapp migrate:mern`));
+  console.log(chalk.yellow(`   node proapp help`));
+  console.log(chalk.yellow(`   node proapp mern:migrate ProjectController.js`));
+  console.log(chalk.yellow(`   cd server && npm run mern:docs`));
 
   console.log(chalk.green.bold(`Happy coding! 🎉\n`));
 
