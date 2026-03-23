@@ -50,12 +50,14 @@ try {
   console.log(chalk.green('  ✓ Frontend dependencies installed'));
 
   // Display next steps
-  console.log(chalk.blue.bold('\n✨ MVC Project created successfully!\n'));
+  console.log(chalk.blue.bold('\n✨ Enterprise MVC Project created successfully!\n'));
   console.log(chalk.cyan('📁 Professional Structure:'));
-  console.log(chalk.white('   - server/app/Controllers  (Logic)'));
-  console.log(chalk.white('   - server/app/Models       (Schemas)'));
-  console.log(chalk.white('   - server/database         (Migrations)'));
-  console.log(chalk.white('   - proapp.js               (CLI Tool)'));
+  console.log(chalk.white('   - server/controllers      (Logic)'));
+  console.log(chalk.white('   - server/models           (Schemas)'));
+  console.log(chalk.white('   - server/routes           (API Endpoints)'));
+  console.log(chalk.white('   - server/middleware       (Auth & Validation)'));
+  console.log(chalk.white('   - server/config           (DB & Logger)'));
+  console.log(chalk.white('   - proapp.js               (In-built CLI)'));
   console.log(chalk.white(`
   ${folderName}/
   ├── client/                 (React Frontend)

@@ -1,4 +1,7 @@
-const { validateRegister, validateLogin, handleValidationErrors } = require('../Middleware/validation');
+const express = require('express');
+const router = express.Router();
+const AuthController = require('../controllers/AuthController');
+const { validateRegister, validateLogin, handleValidationErrors } = require('../middleware/validation');
 
 // @route   POST api/auth/register
 router.post('/register', validateRegister, handleValidationErrors, AuthController.register.bind(AuthController));

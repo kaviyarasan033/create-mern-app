@@ -1,4 +1,4 @@
-const logger = require('../Config/logger');
+const logger = require('../config/logger');
 
 const errorHandler = (err, req, res, next) => {
   logger.error(`${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);

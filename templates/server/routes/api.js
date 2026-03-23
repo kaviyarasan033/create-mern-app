@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ItemController = require('../Controllers/ItemController');
+const ItemController = require('../controllers/ItemController');
 const auth = require('../middleware/authMiddleware');
 
 // @route   GET api/items

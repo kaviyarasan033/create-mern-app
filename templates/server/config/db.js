@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const knex = require('knex');
 const logger = require('./logger');
 
 const connectDB = async () => {
@@ -14,11 +13,10 @@ const connectDB = async () => {
       logger.info('✓ MongoDB Connected');
     } catch (err) {
       logger.error('MongoDB Connection Error:', err);
-      process.exit(1);
+      // Don't exit, let dbCheck middleware handle it
     }
-  } else if (dbType === 'mysql') {
-    // MySQL sample check
-    logger.info('✓ MySQL Configuration Initialized (via Knex)');
+  } else {
+    logger.info(`✓ ${dbType} configuration detected.`);
   }
 };
 
