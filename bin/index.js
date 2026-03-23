@@ -58,6 +58,12 @@ try {
   console.log(chalk.white('   - server/middleware       (Auth & Validation)'));
   console.log(chalk.white('   - server/config           (DB & Logger)'));
   console.log(chalk.white('   - proapp.js               (In-built CLI)'));
+
+  console.log(chalk.cyan('\n🛡️ Security Features:'));
+  console.log(chalk.white('   - Helmet & XSS Protection'));
+  console.log(chalk.white('   - NoSQL Injection Prevention'));
+  console.log(chalk.white('   - Request Rate Limiting'));
+  console.log(chalk.white('   - JWT Authentication'));
   console.log(chalk.white(`
   ${folderName}/
   ├── client/                 (React Frontend)
