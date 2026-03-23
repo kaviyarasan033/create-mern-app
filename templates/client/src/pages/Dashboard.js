@@ -1,36 +1,60 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/apiService';
+import toast from 'react-hot-toast';
+import Spinner from '../components/Spinner';
 
-function Dashboard() {
-  const navigate = useNavigate();
+const Dashboard = () => {
+  const { user, logout } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    navigate('/');
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    try {
+      const res = await api.get('/api/items');
+      setItems(res.data.data);
+    } catch (err) {
+      toast.error('Failed to fetch items');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="dashboard-container">
       <nav className="navbar">
-        <div className="brand">Pro App</div>
-        <button onClick={handleLogout} className="btn-outline">Logout</button>
-      </nav>
-      
-      <main className="dashboard-content">
-        <h1>Dashboard</h1>
-        <div className="grid">
-          <div className="card">
-            <h3>Overview</h3>
-            <p>Welcome to your project! You have 2 items pending.</p>
-          </div>
-          <div className="card">
-            <h3>Statistics</h3>
-            <p>Active users: 124</p>
-            <p>Uptime: 99.9%</p>
-          </div>
+        <div className="nav-brand">ProApp Dashboard</div>
+        <div className="nav-user">
+          <span>Welcome, {user?.name}</span>
+          <button onClick={logout} className="btn-logout">Logout</button>
         </div>
+      </nav>
+
+      <main className="dashboard-content">
+        <h1>Your Items</h1>
+        {loading ? (
+          <Spinner size="large" />
+        ) : (
+          <div className="items-grid">
+            {items.length > 0 ? (
+              items.map(item => (
+                <div key={item._id} className="item-card">
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                </div>
+              ))
+            ) : (
+              <p>No items found. Create one to get started!</p>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
-}
+};
 
 export default Dashboard;

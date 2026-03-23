@@ -1,13 +1,36 @@
-# Your Pro App
+# Your ProApp MVC Project 🚀
 
-This project was bootstrapped with [create-react-proapp](https://github.com/USER/create-react-proapp).
+This project was generated with `create-react-proapp`.
 
-## Available Scripts
+## 📂 Project Structure
 
-### In `server` directory:
-- `npm start`: Starts the production server.
-- `npm run dev`: Starts the development server with nodemon.
+- `server/controllers` - Request logic.
+- `server/models`      - Database schemas.
+- `server/routes`      - API endpoints.
+- `server/middleware`  - Auth & validation.
+- `server/database`    - Migrations.
+- `client/src`         - React frontend with AuthContext.
 
-### In `client` directory:
-- `npm start`: Starts the React development server.
-- `npm run build`: Builds the app for production.
+## 🛠️ CLI Commands (ProApp CLI)
+
+We've included a custom CLI tool for fast development:
+
+- **Create Controller**: `node proapp make:controller MyController`
+- **Create Model**: `node proapp make:model MyModel`
+- **Create Middleware**: `node proapp make:middleware MyMiddleware`
+- **Automated Install**: Handled by the generator!
+
+## 🚀 Getting Started
+
+1. **Setup Env**: Copy `server/.env.example` to `server/.env` and add your keys.
+2. **Start Backend**: `cd server && npm run dev`
+3. **Start Frontend**: `cd client && npm start`
+
+## ✨ Advanced Features Included
+- **JWT Auth**: Full registration and login flow.
+- **Global Toast**: Centered notifications ready.
+- **Docker Support**: `docker-compose up` to run everything.
+- **Logger**: Winston logging in production.
+- **Health Checks**: API monitoring middleware.
+
+Happy coding! 🎊

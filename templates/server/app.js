@@ -1,56 +1,27 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+const errorHandler = require('./middleware/errorMiddleware');
+const dbCheck = require('./middleware/dbCheck');
+const authRoutes = require('./routes/auth');
+const apiRoutes = require('./routes/api');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-const authRoutes = require('./routes/auth');
-const apiRoutes = require('./routes/api');
+app.get('/', (req, res) => res.send('Enterprise API is running...'));
 
+// Database Health Check
+app.use('/api', dbCheck);
+
+// API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api', apiRoutes);
+app.use('/api/items', apiRoutes);
 
-// Welcome route
-app.get('/', (req, res) => {
-  res.json({
-    message: '🚀 Welcome to Your Pro App API',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      api: '/api',
-      health: '/health'
-    }
-  });
-});
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'Server is running ✓' });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: {
-      message: err.message || 'Internal Server Error',
-      status: err.status || 500
-    }
-  });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
+// Global Error Handler
+app.use(errorHandler);
 
 module.exports = app;

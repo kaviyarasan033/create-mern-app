@@ -1,10 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
+const { validateRegister, validateLogin, handleValidationErrors } = require('../Middleware/validation');
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.post('/logout', authController.logout);
-router.get('/me', authController.getCurrentUser);
+// @route   POST api/auth/register
+router.post('/register', validateRegister, handleValidationErrors, AuthController.register.bind(AuthController));
+
+// @route   POST api/auth/login
+router.post('/login', validateLogin, handleValidationErrors, AuthController.login.bind(AuthController));
+
+// @route   POST api/auth/logout
+router.post('/logout', AuthController.logout.bind(AuthController));
+
+// @route   GET api/auth/me
+router.get('/me', AuthController.getCurrentUser.bind(AuthController));
 
 module.exports = router;

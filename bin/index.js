@@ -40,18 +40,22 @@ try {
   console.log(chalk.blue.bold('\n📦 Installing dependencies (this may take a minute)...\n'));
 
   // Install Server Dependencies
-  console.log(chalk.yellow('  → Installing backend dependencies...'));
+  console.log(chalk.yellow('  → Installing backend dependencies (MVC ready)...'));
   execSync('npm install', { cwd: path.join(targetDir, 'server'), stdio: 'inherit' });
   console.log(chalk.green('  ✓ Backend dependencies installed'));
 
   // Install Client Dependencies
-  console.log(chalk.yellow('\n  → Installing frontend dependencies...'));
+  console.log(chalk.yellow('\n  → Installing frontend dependencies (Hot Toast ready)...'));
   execSync('npm install', { cwd: path.join(targetDir, 'client'), stdio: 'inherit' });
   console.log(chalk.green('  ✓ Frontend dependencies installed'));
 
   // Display next steps
-  console.log(chalk.blue.bold('\n✨ Project created successfully!\n'));
-  console.log(chalk.cyan('📁 Project structure:'));
+  console.log(chalk.blue.bold('\n✨ MVC Project created successfully!\n'));
+  console.log(chalk.cyan('📁 Professional Structure:'));
+  console.log(chalk.white('   - server/app/Controllers  (Logic)'));
+  console.log(chalk.white('   - server/app/Models       (Schemas)'));
+  console.log(chalk.white('   - server/database         (Migrations)'));
+  console.log(chalk.white('   - proapp.js               (CLI Tool)'));
   console.log(chalk.white(`
   ${folderName}/
   ├── client/                 (React Frontend)
@@ -81,6 +85,10 @@ try {
   console.log(chalk.white(`3. Start development servers:\n`));
   console.log(chalk.yellow(`   Terminal 1 (Backend):  cd server && npm run dev`));
   console.log(chalk.yellow(`   Terminal 2 (Frontend): cd client && npm start\n`));
+
+  console.log(chalk.white(`4. Use the ProApp CLI (Inside project root):\n`));
+  console.log(chalk.yellow(`   node proapp make:controller MyController`));
+  console.log(chalk.yellow(`   node proapp make:model MyModel`));
 
   console.log(chalk.green.bold(`Happy coding! 🎉\n`));
 

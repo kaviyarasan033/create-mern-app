@@ -35,19 +35,6 @@ class AuthController extends Controller {
       this.sendError(res, err);
     }
   }
-
-  async logout(req, res) {
-    this.sendResponse(res, null, 'Logged out successfully');
-  }
-
-  async getCurrentUser(req, res) {
-    try {
-      const user = await User.findById(req.user.id).select('-password');
-      this.sendResponse(res, user, 'Current user fetched');
-    } catch (err) {
-      this.sendError(res, err);
-    }
-  }
 }
 
 module.exports = new AuthController();
