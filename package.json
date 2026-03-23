@@ -1,0 +1,39 @@
+{
+  "name": "create-react-proapp",
+  "version": "1.0.0",
+  "description": "Create a full-stack React + Node.js project with one command",
+  "bin": {
+    "create-react-proapp": "./bin/index.js"
+  },
+  "files": [
+    "bin",
+    "templates"
+  ],
+  "keywords": [
+    "react",
+    "node",
+    "fullstack",
+    "scaffold",
+    "boilerplate",
+    "create-app",
+    "cli"
+  ],
+  "author": "Kaviyarasan MCA <jnikash@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaviyarasan033/create-react-proapp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaviyarasan033/create-react-proapp/issues"
+  },
+  "homepage": "https://github.com/kaviyarasan033/create-react-proapp#readme",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fs-extra": "^10.0.0"
+  }
+}

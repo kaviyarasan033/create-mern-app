@@ -1,0 +1,10 @@
+node_modules/
+npm-debug.log
+.DS_Store
+.vscode/
+.idea/
+create-react-proapp/node_modules/
+create-react-proapp/templates/*/node_modules/
+dist/
+build/
+.env
