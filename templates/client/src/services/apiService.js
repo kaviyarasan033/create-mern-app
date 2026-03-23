@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const env = typeof import.meta !== 'undefined' ? import.meta.env : {};
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || '',
-  timeout: Number(process.env.REACT_APP_API_TIMEOUT || 10000),
+  baseURL: env.VITE_API_URL || '',
+  timeout: Number(env.VITE_API_TIMEOUT || 10000),
 });
 
 // Request interceptor for tokens

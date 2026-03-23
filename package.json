@@ -1,6 +1,6 @@
 {
   "name": "create-mern-proapp",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Create a production-ready MERN stack MVC project with one command",
   "bin": {
     "create-mern-proapp": "./bin/index.js"
