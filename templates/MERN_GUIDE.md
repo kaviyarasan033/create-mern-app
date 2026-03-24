@@ -1,6 +1,6 @@
-# MERN Guide
+# MERN_Solution Guide
 
-## Installation
+## 1. Install
 
 ```bash
 npm install
@@ -8,38 +8,48 @@ cd server && npm install
 cd ../client && npm install
 ```
 
-## Getting Started
+## 2. Run The Project
 
 ```bash
 npm run mern:start
 ```
 
-Example:
+Or separately:
 
 ```bash
-npm run mern:start
+cd server && npm run dev
+cd client && npm run dev
 ```
 
-## API Routes
+## 3. Demo Login
 
-- `POST /api/auth/register` - create a user account.
-- `POST /api/auth/login` - authenticate and receive a JWT.
-- `POST /api/auth/logout` - client-side logout acknowledgement.
-- `GET /api/auth/me` - get the current authenticated user.
-- `GET /api/items` - list the current user's items.
-- `POST /api/items` - create an item.
-- `PUT /api/items/:id` - update an item.
-- `DELETE /api/items/:id` - delete an item.
-- `GET /api/meta` - built-in route, command, and integration documentation.
+```bash
+cd server && npm run seed:demo
+```
 
-## Controllers
+- Email: `demo@mernkit.dev`
+- Password: `Password123!`
 
-- `server/controllers/authController.js` handles register, login, logout, and current-user requests.
-- `server/controllers/ItemController.js` handles item CRUD in MVC style.
-- `server/controllers/MetaController.js` exposes docs, command groups, and integration notes.
-- `server/controllers/Controller.js` keeps response formatting consistent.
+## 4. API Routes
 
-## Backend Generator Commands
+- `POST /api/auth/register` - create a user account
+- `POST /api/auth/login` - authenticate and receive a JWT
+- `POST /api/auth/logout` - clear client session state
+- `GET /api/auth/me` - return the current authenticated user
+- `GET /api/items` - list protected starter items
+- `POST /api/items` - create a protected starter item
+- `PUT /api/items/:id` - update a protected starter item
+- `DELETE /api/items/:id` - delete a protected starter item
+- `GET /api/meta` - return docs, architecture, and code examples
+
+## 5. Controllers
+
+- `server/controllers/authController.js` handles register, login, logout, and current-user requests
+- `server/controllers/ItemController.js` handles starter CRUD in MVC style
+- `server/controllers/MetaController.js` exposes docs, command groups, architecture, and code samples
+- `server/controllers/Controller.js` keeps response formatting consistent
+
+## 6. Generator Commands
 
 ```bash
 node proapp help
@@ -52,7 +62,7 @@ node proapp make:config cache
 node proapp make:resource project
 ```
 
-## MERN Migration Commands
+## 7. Migration Commands
 
 Use these when you are moving an older backend into this structure:
 
@@ -62,24 +72,223 @@ cd server && npm run mern:migrate -- ProjectController.js
 node proapp mern:migrate ProjectController.js
 ```
 
-`npm run mern:migrate -- ProjectController.js` prints a targeted checklist for models, controllers, routes, auth, environment setup, and follow-up docs.
+## 8. Full Example After `make:resource project`
 
-## Demo Login
+Expected files:
 
-```bash
-cd server
-npm run seed:demo
+```text
+server/controllers/ProjectController.js
+server/models/Project.js
+server/routes/projects.js
 ```
 
-- Email: `demo@mernkit.dev`
-- Password: `Password123!`
+### Sample model
 
-## Frontend Docs Page
+```js
+const mongoose = require('mongoose');
 
-Open `/docs` in the generated client to see:
+const projectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    default: ''
+  },
+  status: {
+    type: String,
+    enum: ['active', 'draft', 'archived'],
+    default: 'active'
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+}, { timestamps: true });
 
-- sidebar navigation
-- copy buttons for commands
-- installation and getting-started commands
-- backend integration steps
-- route and controller references
+module.exports = mongoose.model('Project', projectSchema);
+```
+
+### Sample controller
+
+```js
+const Project = require('../models/Project');
+const Controller = require('./Controller');
+
+class ProjectController extends Controller {
+  async index(req, res) {
+    const projects = await Project.find({ owner: req.user.id }).sort({ createdAt: -1 });
+    return this.sendResponse(res, projects, 'Projects loaded');
+  }
+
+  async store(req, res) {
+    const project = await Project.create({
+      ...req.body,
+      owner: req.user.id
+    });
+
+    return this.sendResponse(res, project, 'Project created', 201);
+  }
+}
+
+module.exports = new ProjectController();
+```
+
+### Sample route
+
+```js
+const express = require('express');
+const router = express.Router();
+const ProjectController = require('../controllers/ProjectController');
+const protect = require('../middleware/authMiddleware');
+
+router.use(protect);
+
+router.get('/', ProjectController.index.bind(ProjectController));
+router.post('/', ProjectController.store.bind(ProjectController));
+
+module.exports = router;
+```
+
+### Register the route
+
+```js
+const projectRoutes = require('./routes/projects');
+
+app.use('/api/projects', projectRoutes);
+```
+
+## 9. Frontend Axios, Service, And Hook Flow
+
+### Axios base service
+
+```js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+export default api;
+```
+
+### Feature service
+
+```js
+import api from './apiService';
+
+export const getProjects = () => api.get('/api/projects');
+export const createProject = (payload) => api.post('/api/projects', payload);
+export const updateProject = (id, payload) => api.put(`/api/projects/${id}`, payload);
+export const deleteProject = (id) => api.delete(`/api/projects/${id}`);
+```
+
+### Custom hook
+
+```js
+import { useCallback, useEffect, useState } from 'react';
+import { createProject, getProjects } from '../services/projectService';
+
+export function useProjects() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadProjects = useCallback(async () => {
+    try {
+      const res = await getProjects();
+      setProjects(res.data.data);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
+
+  const addProject = async (payload) => {
+    const res = await createProject(payload);
+    setProjects((current) => [res.data.data, ...current]);
+  };
+
+  return { projects, loading, loadProjects, addProject };
+}
+```
+
+### Page usage
+
+```js
+import React from 'react';
+import { useProjects } from '../hooks/useProjects';
+
+function Projects() {
+  const { projects, loading } = useProjects();
+
+  if (loading) return <p>Loading projects...</p>;
+
+  return (
+    <section>
+      <h1>Projects</h1>
+      {projects.map((project) => (
+        <article key={project._id}>
+          <h2>{project.name}</h2>
+          <p>{project.description}</p>
+        </article>
+      ))}
+    </section>
+  );
+}
+
+export default Projects;
+```
+
+## 10. Docs Page Content
+
+Open `/docs` in the client to view:
+
+- overview and architecture
+- setup commands
+- routes and integration values
+- frontend Axios and hooks examples
+- backend model, controller, and route examples
+- generated file flow after create or migrate
+
+## 11. Git Push Flow
+
+```bash
+git add .
+git commit -m "Setup MERN_Solution"
+git branch -M main
+git remote add origin https://github.com/your-name/your-repo.git
+git push -u origin main
+```
+
+## 12. npm Publish Flow
+
+If you are publishing the package itself:
+
+```bash
+npm login
+npm version patch
+npm publish
+```
+
+Before publish, verify:
+
+- `package.json` name and version are correct
+- README content is updated
+- generator files are included in the published package
+- local install works with `npx` or `npm pack`

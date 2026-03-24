@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/apiService';
 import toast from 'react-hot-toast';
 import Spinner from '../components/Spinner';
-import { FaCirclePlus, FaCodeBranch, FaTrash } from 'react-icons/fa6';
+import { FaArrowRotateRight, FaCirclePlus, FaCodeBranch, FaDatabase, FaShield, FaTrash } from 'react-icons/fa6';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -51,6 +51,23 @@ const Dashboard = () => {
     }
   };
 
+  const dashboardStats = [
+    { label: 'items', value: items.length, icon: <FaDatabase /> },
+    { label: 'status', value: user?.role || 'member', icon: <FaShield /> },
+    { label: 'mode', value: 'protected', icon: <FaCodeBranch /> }
+  ];
+
+  const commandBlocks = [
+    'node proapp make:controller Project',
+    'node proapp make:model Project',
+    'node proapp make:config cache',
+    'node proapp make:resource project',
+    'node proapp make:route projects',
+    'cd server && npm run mern:docs',
+    'cd server && npm run mern:migrate -- ProjectController.js',
+    'cd server && npm run seed:demo'
+  ];
+
   return (
     <Container className="dashboard-container">
       <motion.div
@@ -58,19 +75,26 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         >
-          <Row className="mb-4 align-items-center">
-            <Col>
+          <section className="dashboard-hero">
+            <div className="dashboard-hero-copy">
               <span className="eyebrow">Protected MERN workspace</span>
               <h1 className="fw-bold">Welcome, {user?.name}</h1>
-              <p className="text-muted mb-0">Create data, test controllers, and verify protected routes from one dashboard.</p>
-            </Col>
-            <Col xs="auto">
+              <p className="text-muted mb-0">Create data, run starter commands, and validate protected routes from one responsive command surface.</p>
               <div className="dashboard-actions">
-                <Button variant="outline-secondary" onClick={fetchItems}>Refresh</Button>
-                <Button variant="outline-danger" onClick={logout}>Logout</Button>
+                <Button variant="outline-secondary" className="nav-action-button" onClick={fetchItems}><FaArrowRotateRight /> Refresh</Button>
+                <Button variant="outline-danger" className="nav-action-button" onClick={logout}>Logout</Button>
               </div>
-            </Col>
-          </Row>
+            </div>
+            <div className="dashboard-stat-grid">
+              {dashboardStats.map((item) => (
+                <div key={item.label} className="hero-metric-card dashboard-metric-card">
+                  <div className="dashboard-metric-icon">{item.icon}</div>
+                  <span>{item.value}</span>
+                  <small>{item.label}</small>
+                </div>
+              ))}
+            </div>
+          </section>
 
           <Row className="g-4 mb-4">
             <Col lg={5}>
@@ -118,15 +142,15 @@ const Dashboard = () => {
               <Card className="panel-card h-100">
                 <Card.Body>
                   <div className="panel-heading"><FaCodeBranch /> Starter commands</div>
-                  <div className="command-list">
-                    <code>node proapp make:controller Project</code>
-                    <code>node proapp make:model Project</code>
-                    <code>node proapp make:config cache</code>
-                    <code>node proapp make:resource project</code>
-                    <code>node proapp make:route projects</code>
-                    <code>cd server && npm run mern:docs</code>
-                    <code>cd server && npm run mern:migrate -- ProjectController.js</code>
-                    <code>cd server && npm run seed:demo</code>
+                  <div className="dashboard-command-board">
+                    {commandBlocks.map((command) => (
+                      <div key={command} className="command-card command-card-visible">
+                        <div className="command-card-head">
+                          <strong>CLI</strong>
+                        </div>
+                        <pre className="docs-code-block compact-code"><code>{command}</code></pre>
+                      </div>
+                    ))}
                   </div>
                 </Card.Body>
               </Card>

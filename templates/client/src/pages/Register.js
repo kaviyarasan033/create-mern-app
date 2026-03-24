@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Form, Button, Card } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
-import { FaIdCard, FaUserPlus } from 'react-icons/fa6';
+import { FaCircleCheck, FaIdCard, FaUserPlus } from 'react-icons/fa6';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -36,7 +36,30 @@ const Register = () => {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
+        className="auth-grid"
       >
+        <div className="auth-copy auth-copy-compact">
+          <div className="hero-announcement">
+            <span className="hero-announcement-badge">Register</span>
+            <span>Create a new account for MERN_Solution without changing your existing backend auth flow.</span>
+          </div>
+          <span className="eyebrow">Secure onboarding</span>
+          <h1>Create a developer account in a simple, clean starter interface.</h1>
+          <p>
+            Keep your current API and token logic while giving MERN_Solution a more professional registration experience.
+          </p>
+          <div className="feature-list feature-list-compact">
+            <span><FaCircleCheck /> JWT-ready sign up</span>
+            <span><FaCircleCheck /> Mongo-backed account creation</span>
+            <span><FaCircleCheck /> Responsive UI for all devices</span>
+          </div>
+          <div className="product-preview-grid product-preview-grid-single">
+            <div className="product-preview-card">
+              <strong>Why this flow works</strong>
+              <p>Clear forms, better spacing, and a documentation-friendly UI without changing auth implementation.</p>
+            </div>
+          </div>
+        </div>
         <Card className="auth-card">
           <Card.Body>
             <div className="card-icon"><FaUserPlus /></div>

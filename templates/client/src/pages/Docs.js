@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 're
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import {
   FaBookOpen,
+  FaDiagramProject,
   FaCode,
   FaCopy,
   FaCube,
@@ -22,10 +23,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const iconMap = {
   overview: <FaBookOpen />,
+  architecture: <FaDiagramProject />,
   products: <FaCube />,
   gettingStarted: <FaPlay />,
   commands: <FaTerminal />,
   frontend: <FaLaptopCode />,
+  backend: <FaWrench />,
   routes: <FaRoute />,
   implementation: <FaWrench />,
   sample: <FaCode />,
@@ -104,10 +107,12 @@ function Docs() {
 
   const sections = [
     { id: 'overview', label: 'Overview', description: 'Definition and workflow' },
+    { id: 'architecture', label: 'Architecture', description: 'Folders, flow, and generated files' },
     { id: 'products', label: 'Products', description: 'Developer product ideas' },
     { id: 'gettingStarted', label: 'Get Started', description: 'Install and run' },
     { id: 'commands', label: 'Commands', description: 'Copy-ready command blocks' },
-    { id: 'frontend', label: 'Frontend', description: 'UI and module structure' },
+    { id: 'frontend', label: 'Frontend', description: 'Axios, hooks, pages, and examples' },
+    { id: 'backend', label: 'Backend', description: 'Models, controllers, routes, and samples' },
     { id: 'routes', label: 'Routes', description: 'API and integration values' },
     { id: 'implementation', label: 'Implementation', description: 'Step-by-step build plan' },
     { id: 'sample', label: 'Sample', description: 'Request and response' },
@@ -172,6 +177,30 @@ function Docs() {
     </div>
   );
 
+  const renderArchitecture = () => (
+    <div className="docs-panel-grid docs-grid-2">
+      <Card className="panel-card docs-card-animate docs-focus-card">
+        <Card.Body>
+          <div className="section-heading">{iconMap.architecture} Suggested architecture</div>
+          <div className="docs-list">
+            {(meta.architectureFlow || []).map((item) => (
+              <div key={item.title} className="stack-detail-card">
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Card.Body>
+      </Card>
+      <Card className="panel-card docs-card-animate">
+        <Card.Body>
+          <div className="section-heading">{iconMap.sample} File structure after create or migrate</div>
+          <pre className="docs-code-block docs-architecture-code"><code>{meta?.sampleArchitecture}</code></pre>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+
   const renderGettingStarted = () => (
     <div className="docs-panel-grid docs-grid-2">
       {(meta.gettingStarted || []).map((step) => (
@@ -230,6 +259,22 @@ function Docs() {
           </Card>
         ))}
       </div>
+      <div className="docs-panel-grid docs-grid-2 docs-card-animate">
+        {(meta.frontendSamples || []).map((sample) => (
+          <Card key={sample.title} className="panel-card h-100">
+            <Card.Body>
+              <div className="command-card-head">
+                <strong>{sample.title}</strong>
+                <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(sample.code)}>
+                  <FaCopy /> Copy
+                </Button>
+              </div>
+              <p>{sample.description}</p>
+              <pre className="docs-code-block"><code>{sample.code}</code></pre>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
       <Row className="g-4 docs-card-animate">
         <Col lg={6}>
           <Card className="panel-card h-100">
@@ -263,6 +308,40 @@ function Docs() {
           </Card>
         </Col>
       </Row>
+    </>
+  );
+
+  const renderBackend = () => (
+    <>
+      <div className="docs-panel-grid docs-grid-2 docs-card-animate">
+        {(meta.backendSamples || []).map((sample) => (
+          <Card key={sample.title} className="panel-card h-100">
+            <Card.Body>
+              <div className="command-card-head">
+                <strong>{sample.title}</strong>
+                <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(sample.code)}>
+                  <FaCopy /> Copy
+                </Button>
+              </div>
+              <p>{sample.description}</p>
+              <pre className="docs-code-block"><code>{sample.code}</code></pre>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
+      <Card className="panel-card docs-card-animate">
+        <Card.Body>
+          <div className="section-heading">{iconMap.backend} Full resource flow after generator</div>
+          <div className="docs-list">
+            {(meta.generatedFlow || []).map((item) => (
+              <div key={item.title} className="stack-detail-card">
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Card.Body>
+      </Card>
     </>
   );
 
@@ -384,12 +463,16 @@ function Docs() {
     switch (activeSection) {
       case 'products':
         return renderProducts();
+      case 'architecture':
+        return renderArchitecture();
       case 'gettingStarted':
         return renderGettingStarted();
       case 'commands':
         return renderCommands();
       case 'frontend':
         return renderFrontend();
+      case 'backend':
+        return renderBackend();
       case 'routes':
         return renderRoutes();
       case 'implementation':

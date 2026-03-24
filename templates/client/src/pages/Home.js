@@ -5,7 +5,18 @@ import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
-import { FaArrowRight, FaCodeBranch, FaCopy, FaKey, FaLock, FaTerminal, FaUserShield } from 'react-icons/fa6';
+import {
+  FaArrowRight,
+  FaCodeBranch,
+  FaCopy,
+  FaKey,
+  FaLayerGroup,
+  FaLock,
+  FaServer,
+  FaTerminal,
+  FaUserShield,
+  FaWrench
+} from 'react-icons/fa6';
 
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -46,6 +57,28 @@ const Home = () => {
     'cd server && npm run seed:demo'
   ];
 
+  const productHighlights = [
+    {
+      title: 'Clear setup flow',
+      detail: 'Show install, run, build, and seed steps in a simple developer-friendly landing page.'
+    },
+    {
+      title: 'Built-in MVC structure',
+      detail: 'Keep controllers, models, routes, middleware, and services organized from the start.'
+    },
+    {
+      title: 'Ready docs surface',
+      detail: 'Present commands, modules, and route references in a clean responsive docs layout.'
+    }
+  ];
+
+  const launchStats = [
+    { value: 'MongoDB', label: 'database layer' },
+    { value: 'Express', label: 'api routes' },
+    { value: 'React', label: 'developer ui' },
+    { value: 'Node', label: 'tooling flow' }
+  ];
+
   return (
     <div className="auth-shell">
       <motion.section
@@ -55,51 +88,65 @@ const Home = () => {
         className="auth-grid"
       >
         <div className="auth-copy">
-          <div className="hero-visual-backdrop">
-            <div className="hero-glow hero-glow-one" />
-            <div className="hero-glow hero-glow-two" />
-            <svg className="hero-wireframe" viewBox="0 0 620 420" aria-hidden="true">
-              <defs>
-                <linearGradient id="heroLine" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#ffb86c" />
-                  <stop offset="100%" stopColor="#58c6a9" />
-                </linearGradient>
-              </defs>
-              <rect x="20" y="24" width="250" height="142" rx="20" fill="rgba(255,255,255,0.5)" stroke="url(#heroLine)" strokeWidth="2" />
-              <rect x="302" y="70" width="286" height="166" rx="24" fill="rgba(255,255,255,0.38)" stroke="url(#heroLine)" strokeWidth="2" />
-              <rect x="90" y="214" width="240" height="150" rx="22" fill="rgba(255,255,255,0.34)" stroke="url(#heroLine)" strokeWidth="2" />
-              <path d="M270 92C326 92 326 126 382 126" fill="none" stroke="url(#heroLine)" strokeWidth="2.5" strokeDasharray="8 10" />
-              <path d="M210 214C210 186 252 176 288 176C344 176 344 204 404 204" fill="none" stroke="url(#heroLine)" strokeWidth="2.5" strokeDasharray="8 10" />
-              <circle cx="120" cy="95" r="10" fill="#123524" />
-              <circle cx="382" cy="126" r="12" fill="#d98324" />
-              <circle cx="210" cy="214" r="12" fill="#1f5c43" />
-            </svg>
+          <div className="hero-announcement">
+            <span className="hero-announcement-badge">MERN_Solution</span>
+            <span>Clean documentation-first UI for your built-in MERN MVC starter.</span>
           </div>
-          <span className="eyebrow">Open source developer products</span>
-          <h1>Ship docs, commands, onboarding, and MERN product pages without changing login.</h1>
+          <span className="eyebrow">MERN MVC solution</span>
+          <h1>Built for developers who need a clear starter, docs, and working auth.</h1>
           <p>
-            Build API workbenches, code review tools, docs copilots, or internal engineering portals with a frontend that already explains how to install, use, and extend the product.
+            MERN_Solution gives you a simple frontend, protected login, starter CRUD, documentation flow, and developer commands without changing your existing backend logic.
           </p>
           <div className="feature-list">
             <span><FaUserShield /> JWT auth flow</span>
             <span><FaKey /> Demo login seed</span>
-            <span><FaArrowRight /> Built-in migration commands</span>
-            <span><FaTerminal /> Copy-ready command docs</span>
-            <span><FaCodeBranch /> Open source friendly structure</span>
+            <span><FaCodeBranch /> MVC folder structure</span>
+            <span><FaTerminal /> Command-based setup</span>
+            <span><FaArrowRight /> Responsive docs flow</span>
+          </div>
+          <div className="hero-surface">
+            <div className="hero-surface-grid" aria-hidden="true" />
+            <div className="hero-surface-content">
+              <div className="hero-architecture-card">
+                <div className="hero-architecture-topline">
+                  <strong>Developer workflow</strong>
+                  <small>clean and production-oriented</small>
+                </div>
+                <div className="hero-architecture-grid">
+                  <div className="hero-architecture-node">
+                    <span className="hero-node-icon"><FaServer /></span>
+                    <strong>Backend</strong>
+                    <p>Express routes, controllers, middleware, and Mongo models.</p>
+                  </div>
+                  <div className="hero-architecture-node">
+                    <span className="hero-node-icon"><FaLayerGroup /></span>
+                    <strong>Frontend</strong>
+                    <p>Docs page, login, register, dashboard, and command surfaces.</p>
+                  </div>
+                  <div className="hero-architecture-node hero-architecture-node-wide">
+                    <span className="hero-node-icon"><FaWrench /></span>
+                    <strong>Built-in tools</strong>
+                    <p>Seed demo data, generate resources, run build, and scale the starter cleanly.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="hero-stat-grid">
+                {launchStats.map((item) => (
+                  <div key={item.label} className="hero-stat-card">
+                    <strong>{item.value}</strong>
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="product-preview-grid">
-            <div className="product-preview-card">
-              <strong>AI Review Assistant</strong>
-              <p>PR summaries, risk highlights, and contributor-friendly reporting.</p>
-            </div>
-            <div className="product-preview-card">
-              <strong>API Testing Workbench</strong>
-              <p>Collections, saved environments, and integration-ready commands.</p>
-            </div>
-            <div className="product-preview-card">
-              <strong>Docs Copilot Portal</strong>
-              <p>Usage, setup, implementation, and examples in one frontend surface.</p>
-            </div>
+            {productHighlights.map((item) => (
+              <div key={item.title} className="product-preview-card">
+                <strong>{item.title}</strong>
+                <p>{item.detail}</p>
+              </div>
+            ))}
           </div>
           <div className="hero-command-strip">
             {starterCommands.map((command) => (
@@ -110,7 +157,7 @@ const Home = () => {
             ))}
           </div>
           <div className="demo-credentials">
-            <strong>Default demo login</strong>
+            <strong>MERN_Solution demo login</strong>
             <span>`demo@mernkit.dev`</span>
             <span>`Password123!`</span>
             <small>Run `cd server && npm run seed:demo` first.</small>
@@ -121,7 +168,7 @@ const Home = () => {
           <Card.Body>
             <div className="card-icon"><FaLock /></div>
             <h2 className="mb-3 fw-bold">Login</h2>
-            <p className="auth-subtitle">Sign in to manage your starter data and test protected routes.</p>
+            <p className="auth-subtitle">Sign in to access the MERN_Solution dashboard and protected routes.</p>
             <Form onSubmit={handleLogin}>
               <Form.Group className="mb-3">
                 <Form.Label>Email Address</Form.Label>

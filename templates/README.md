@@ -1,18 +1,23 @@
-# Your MERN MVC Project
+# MERN_Solution
 
 This project was generated with `create-mern-proapp`.
 
-## What Is Included
+It includes a clean MERN MVC structure, auth flow, protected dashboard, docs page, generator commands, and migration help.
 
-- `server/controllers` - MVC request handlers.
-- `server/models` - MongoDB schemas.
-- `server/routes` - REST API endpoints.
-- `server/middleware` - auth, validation, and error handling.
-- `server/config` - database and reusable backend config modules.
-- `server/scripts` - backend start help, migration help, and demo seeding.
-- `client/src` - React frontend with auth context, docs page, and command sidebar.
+## Project Structure
 
-## Quick Installation
+- `server/controllers` - MVC request handlers
+- `server/models` - Mongoose schemas
+- `server/routes` - API endpoints
+- `server/middleware` - auth, validation, and error handlers
+- `server/config` - database and reusable config modules
+- `server/scripts` - start helpers, docs helpers, migration helpers, and demo seeders
+- `client/src/pages` - login, register, docs, dashboard, and page-level UI
+- `client/src/services` - Axios service modules
+- `client/src/context` - auth context and protected flow state
+- `client/src/styles` - responsive docs-style UI system
+
+## Installation
 
 ```bash
 npm install
@@ -20,59 +25,161 @@ cd server && npm install
 cd ../client && npm install
 ```
 
-## Getting Started
+## Start The App
 
 ```bash
 npm run mern:start
 ```
 
-This single command starts both the backend and frontend together.
-
-Example:
+Or run manually:
 
 ```bash
-my-mern-app> npm run mern:start
+cd server && npm run dev
+cd client && npm run dev
 ```
-
-## Backend CLI Commands
-
-Use the built-in `proapp.js` helper from the project root:
-
-- `node proapp help`
-- `node proapp docs`
-- `node proapp make:controller Project`
-- `node proapp make:model Project`
-- `node proapp make:middleware auditLog`
-- `node proapp make:route projects`
-- `node proapp make:config cache`
-- `node proapp make:resource project`
-- `node proapp mern:migrate ProjectController.js`
-
-## Server Scripts
-
-- `npm run mern:start`
-- `cd server && npm run mern:start`
-- `cd server && npm run mern:docs`
-- `cd server && npm run mern:migrate -- ProjectController.js`
-- `cd server && npm run seed:demo`
 
 ## Default Demo Login
 
-Run `cd server && npm run seed:demo` and use:
+```bash
+cd server && npm run seed:demo
+```
 
 - Email: `demo@mernkit.dev`
 - Password: `Password123!`
 
-## Routes And Controllers
+## CLI Commands
 
-- Auth routes live in `server/routes/auth.js` and call `server/controllers/authController.js`.
-- Item routes live in `server/routes/api.js` and call `server/controllers/ItemController.js`.
-- Meta/docs route lives in `server/routes/meta.js` and returns route, command, and integration metadata from the API.
+Run from the project root:
+
+```bash
+node proapp help
+node proapp docs
+node proapp make:controller Project
+node proapp make:model Project
+node proapp make:middleware auditLog
+node proapp make:route projects
+node proapp make:config cache
+node proapp make:resource project
+node proapp mern:migrate ProjectController.js
+```
+
+## Server Scripts
+
+```bash
+cd server && npm run mern:start
+cd server && npm run mern:docs
+cd server && npm run mern:migrate -- ProjectController.js
+cd server && npm run seed:demo
+```
+
+## Full Resource Workflow
+
+### Create a resource
+
+```bash
+node proapp make:resource project
+```
+
+Expected backend files:
+
+- `server/models/Project.js`
+- `server/controllers/ProjectController.js`
+- `server/routes/projects.js`
+
+### Register the route
+
+```js
+const projectRoutes = require('./routes/projects');
+
+app.use('/api/projects', projectRoutes);
+```
+
+### Create frontend service
+
+```js
+import api from './apiService';
+
+export const getProjects = () => api.get('/api/projects');
+export const createProject = (payload) => api.post('/api/projects', payload);
+```
+
+### Create custom hook
+
+```js
+import { useCallback, useEffect, useState } from 'react';
+import { createProject, getProjects } from '../services/projectService';
+
+export function useProjects() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadProjects = useCallback(async () => {
+    const res = await getProjects();
+    setProjects(res.data.data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
+
+  const addProject = async (payload) => {
+    const res = await createProject(payload);
+    setProjects((current) => [res.data.data, ...current]);
+  };
+
+  return { projects, loading, loadProjects, addProject };
+}
+```
+
+### Example page usage
+
+```js
+import React from 'react';
+import { useProjects } from '../hooks/useProjects';
+
+function Projects() {
+  const { projects, loading } = useProjects();
+
+  if (loading) return <p>Loading projects...</p>;
+
+  return (
+    <section>
+      <h1>Projects</h1>
+      {projects.map((project) => (
+        <article key={project._id}>
+          <h2>{project.name}</h2>
+          <p>{project.description}</p>
+        </article>
+      ))}
+    </section>
+  );
+}
+
+export default Projects;
+```
 
 ## Docs Experience
 
-- Visit `/docs` in the frontend for the docs sidebar, getting-started commands, copy buttons, and route references.
-- Open `MERN_GUIDE.md` for the long-form integration guide.
-- Run `cd server && npm run mern:docs` for terminal-friendly backend docs.
+Visit `/docs` in the frontend to see:
 
-Happy coding.
+- setup commands
+- route references
+- architecture guidance
+- frontend Axios and hooks examples
+- backend model, controller, and route examples
+- generated resource flow after create or migrate
+
+## Git Push Flow
+
+```bash
+git add .
+git commit -m "Setup MERN_Solution project"
+git branch -M main
+git remote add origin https://github.com/your-name/your-repo.git
+git push -u origin main
+```
+
+## Open `MERN_GUIDE.md`
+
+Use `MERN_GUIDE.md` for a longer guide covering setup, migration, docs flow, and package publishing steps.

@@ -1,19 +1,54 @@
 # create-mern-proapp
 
-Create a production-ready MERN stack app with Express MVC, MongoDB models, React auth screens, backend scaffold commands, and migration helpers.
+Create a developer-friendly MERN MVC starter with auth, docs, generator commands, migration help, and a complete frontend/backend flow.
+
+## What You Get
+
+- Express MVC backend with controllers, models, middleware, routes, and reusable config.
+- React frontend with login, register, dashboard, and a documentation-first `/docs` page.
+- JWT authentication flow with protected routes and demo seed credentials.
+- Built-in CLI commands for creating controllers, models, routes, middleware, configs, and full resources.
+- Metadata-driven docs with code samples for Axios, hooks, models, controllers, routes, and resource architecture.
 
 ## Quick Start
 
 ```bash
-npx create-mern-proapp my-amazing-app
+npx create-mern-proapp my-app
+cd my-app
+npm install
+cd server && npm install
+cd ../client && npm install
 ```
 
-After generation, developers can use the built-in project CLI and server scripts to scaffold backend files and follow MERN migration steps.
+## Run The Project
 
-## Generated Backend Commands
+```bash
+npm run mern:start
+```
+
+Or run each side manually:
+
+```bash
+cd server && npm run dev
+cd client && npm run dev
+```
+
+## Demo Login
+
+```bash
+cd server && npm run seed:demo
+```
+
+- Email: `demo@mernkit.dev`
+- Password: `Password123!`
+
+## CLI Commands
+
+Run these from the generated project root:
 
 ```bash
 node proapp help
+node proapp docs
 node proapp make:controller Project
 node proapp make:model Project
 node proapp make:middleware auditTrail
@@ -32,18 +67,114 @@ cd server && npm run mern:migrate -- ProjectController.js
 cd server && npm run seed:demo
 ```
 
-## Docs And Integration
+## Example Resource Flow
 
-- `/docs` page with sidebar navigation, getting-started steps, copy buttons, and route references.
-- `GET /api/meta` endpoint for command and integration metadata.
-- `MERN_GUIDE.md` and generated `README.md` inside the scaffolded project.
+### 1. Generate a resource
 
-## Included Features
+```bash
+node proapp make:resource project
+```
 
-- Express MVC backend with controllers, models, middleware, routes, and config helpers.
-- React frontend with login, register, dashboard, and built-in docs experience.
-- JWT auth flow with protected routes and demo seed command.
-- MERN migration help for controllers, models, routes, auth, and environment setup.
+### 2. Complete the backend files
+
+- `server/models/Project.js`
+- `server/controllers/ProjectController.js`
+- `server/routes/projects.js`
+
+### 3. Register the route in the server
+
+```js
+const projectRoutes = require('./routes/projects');
+
+app.use('/api/projects', projectRoutes);
+```
+
+### 4. Connect the frontend
+
+- Create `client/src/services/projectService.js`
+- Create `client/src/hooks/useProjects.js`
+- Add a page like `client/src/pages/Projects.js`
+
+## Frontend Example
+
+```js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+export default api;
+```
+
+## Backend Example
+
+```js
+const Project = require('../models/Project');
+const Controller = require('./Controller');
+
+class ProjectController extends Controller {
+  async index(req, res) {
+    const projects = await Project.find({ owner: req.user.id }).sort({ createdAt: -1 });
+    return this.sendResponse(res, projects, 'Projects loaded');
+  }
+
+  async store(req, res) {
+    const project = await Project.create({
+      ...req.body,
+      owner: req.user.id
+    });
+
+    return this.sendResponse(res, project, 'Project created', 201);
+  }
+}
+
+module.exports = new ProjectController();
+```
+
+## Docs And Guides
+
+- `/docs` page in the generated client
+- `GET /api/meta` endpoint for docs content and code snippets
+- `templates/README.md` for generated project usage
+- `templates/MERN_GUIDE.md` for the long-form workflow guide
+
+## Git Push Flow
+
+```bash
+git init
+git add .
+git commit -m "Initial MERN_Solution setup"
+git branch -M main
+git remote add origin https://github.com/your-name/your-repo.git
+git push -u origin main
+```
+
+## npm Publish Flow
+
+Before publishing this CLI package:
+
+```bash
+npm login
+npm version patch
+npm publish
+```
+
+Make sure:
+
+- `package.json` has the correct `name`, `version`, `bin`, `files`, and `repository`
+- the README is updated
+- the package builds and installs correctly
 
 ## License
 

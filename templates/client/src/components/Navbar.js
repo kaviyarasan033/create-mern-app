@@ -3,7 +3,7 @@ import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { FaBookOpen, FaBoxesStacked, FaRightFromBracket, FaRocket } from 'react-icons/fa6';
+import { FaBookOpen, FaBoxesStacked, FaCube, FaRightFromBracket } from 'react-icons/fa6';
 
 const AppNavbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -14,26 +14,30 @@ const AppNavbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Navbar expand="lg" className="premium-navbar">
+      <Navbar expand="lg" className="premium-navbar" sticky="top">
         <Container>
           <Navbar.Brand as={Link} to="/" className="fw-bold brand-mark">
-            <FaRocket /> <span>MERN Command Center</span>
+            <span className="brand-logo"><FaCube /></span>
+            <span className="brand-copy">
+              <strong>MERN_Solution</strong>
+              <small>MERN MVC starter for developers</small>
+            </span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto align-items-center">
+            <Nav className="ms-auto align-items-center nav-cluster">
               <Nav.Link as={Link} to="/docs"> <FaBookOpen /> Docs</Nav.Link>
               {isAuthenticated ? (
                 <>
                   <Nav.Link as={Link} to="/dashboard"><FaBoxesStacked /> Dashboard</Nav.Link>
                   <span className="nav-user-pill">Hello, {user?.name}</span>
-                  <Button variant="outline-light" size="sm" onClick={logout}><FaRightFromBracket /> Logout</Button>
+                  <Button variant="outline-light" size="sm" className="nav-action-button" onClick={logout}><FaRightFromBracket /> Logout</Button>
                 </>
               ) : (
                 <>
                   <Nav.Link as={Link} to="/">Login</Nav.Link>
                   <Nav.Link as={Link} to="/register">
-                    <Button variant="primary" size="sm">Get Started</Button>
+                    <Button variant="primary" size="sm" className="nav-action-button">Get Started</Button>
                   </Nav.Link>
                 </>
               )}
