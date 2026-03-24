@@ -29,7 +29,7 @@ app.use('/api/', limiter);
 
 // Standard Middleware
 app.use(cors({
-  origin: (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:3000').split(',')
+  origin: (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:5173,http://localhost:3000').split(',')
 }));
 app.use(express.json());
 
@@ -42,11 +42,12 @@ app.get('/', (req, res) => {
   });
 });
 
+// API Routes
+app.use('/api/meta', metaRoutes);
+
 // Database Health Check
 app.use('/api', dbCheck);
 
-// API Routes
-app.use('/api/meta', metaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/items', apiRoutes);
 

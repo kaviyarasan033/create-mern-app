@@ -3,7 +3,7 @@ import axios from 'axios';
 const env = typeof import.meta !== 'undefined' ? import.meta.env : {};
 
 const api = axios.create({
-  baseURL: env.VITE_API_URL || '',
+  baseURL: env.VITE_API_BASE_URL || env.VITE_API_URL || '',
   timeout: Number(env.VITE_API_TIMEOUT || 10000),
 });
 
@@ -23,7 +23,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isMetaRequest = error.config?.url?.includes('/api/meta');
+
+    if (error.response?.status === 401 && !isMetaRequest) {
       localStorage.removeItem('token');
       window.location.href = '/';
     }

@@ -5,7 +5,7 @@ import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
-import { FaArrowRight, FaCodeBranch, FaKey, FaLock, FaTerminal, FaUserShield } from 'react-icons/fa6';
+import { FaArrowRight, FaCodeBranch, FaCopy, FaKey, FaLock, FaTerminal, FaUserShield } from 'react-icons/fa6';
 
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -30,6 +30,21 @@ const Home = () => {
       error: (err) => err.response?.data?.message || 'Login failed'
     });
   };
+
+  const copyCommand = async (value) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success('Copied to clipboard');
+    } catch (error) {
+      toast.error('Copy failed');
+    }
+  };
+
+  const starterCommands = [
+    'cd server && npm run dev',
+    'cd client && npm run dev',
+    'cd server && npm run seed:demo'
+  ];
 
   return (
     <div className="auth-shell">
@@ -85,6 +100,14 @@ const Home = () => {
               <strong>Docs Copilot Portal</strong>
               <p>Usage, setup, implementation, and examples in one frontend surface.</p>
             </div>
+          </div>
+          <div className="hero-command-strip">
+            {starterCommands.map((command) => (
+              <button key={command} type="button" className="hero-command-chip" onClick={() => copyCommand(command)}>
+                <code>{command}</code>
+                <FaCopy />
+              </button>
+            ))}
           </div>
           <div className="demo-credentials">
             <strong>Default demo login</strong>

@@ -76,7 +76,7 @@ class MetaController extends Controller {
         { title: 'Start backend', command: 'cd my-app/server && npm run dev', description: 'Run the API in watch mode.' },
         { title: 'Start frontend', command: 'cd my-app/client && npm run dev', description: 'Open the React app in the browser.' },
         { title: 'Seed demo user', command: 'cd my-app/server && npm run seed:demo', description: 'Create the default demo credentials.' },
-        { title: 'Open docs', command: 'open http://localhost:5173/docs', description: 'Review commands, architecture, and integration guidance.' }
+        { title: 'Open docs', command: 'http://localhost:5173/docs', description: 'Open the docs page in your browser after starting the client.' }
       ],
       integration: [
         { title: 'Environment setup', command: 'copy server/.env.example server/.env', description: 'Create local backend environment values before connecting MongoDB.' },
