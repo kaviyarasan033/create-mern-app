@@ -1,4 +1,7 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const dotenvExpand = require('dotenv-expand');
+
+dotenvExpand.expand(dotenv.config());
 const mongoose = require('mongoose');
 const connectDB = require('../config/db');
 const User = require('../models/User');
