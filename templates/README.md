@@ -15,6 +15,7 @@ This project was generated with `create-mern-proapp`.
 ## Quick Installation
 
 ```bash
+npm install
 cd server && npm install
 cd ../client && npm install
 ```
@@ -22,9 +23,15 @@ cd ../client && npm install
 ## Getting Started
 
 ```bash
-cd server && npm run mern:start
-cd server && npm run dev
-cd client && npm start
+npm run mern:start
+```
+
+This single command starts both the backend and frontend together.
+
+Example:
+
+```bash
+my-mern-app> npm run mern:start
 ```
 
 ## Backend CLI Commands
@@ -43,6 +50,7 @@ Use the built-in `proapp.js` helper from the project root:
 
 ## Server Scripts
 
+- `npm run mern:start`
 - `cd server && npm run mern:start`
 - `cd server && npm run mern:docs`
 - `cd server && npm run mern:migrate -- ProjectController.js`

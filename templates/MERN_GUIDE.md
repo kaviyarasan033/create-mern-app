@@ -3,6 +3,7 @@
 ## Installation
 
 ```bash
+npm install
 cd server && npm install
 cd ../client && npm install
 ```
@@ -10,9 +11,13 @@ cd ../client && npm install
 ## Getting Started
 
 ```bash
-cd server && npm run mern:start
-cd server && npm run dev
-cd ../client && npm start
+npm run mern:start
+```
+
+Example:
+
+```bash
+npm run mern:start
 ```
 
 ## API Routes

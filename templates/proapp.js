@@ -60,6 +60,7 @@ function printHelp() {
   console.log(color.cyan('  node proapp make:resource project'));
   console.log('');
   console.log(color.yellow('Docs and migration'));
+  console.log(color.cyan('  npm run mern:start'));
   console.log(color.cyan('  node proapp docs'));
   console.log(color.cyan('  node proapp help'));
   console.log(color.cyan('  node proapp migrate:mern [ControllerName.js]'));
@@ -182,6 +183,7 @@ if (command === 'make:controller' && name) {
   console.log(color.white('- API docs: GET /api/meta'));
   console.log(color.white('- Frontend docs page: /docs'));
   console.log(color.white('- Guide file: MERN_GUIDE.md'));
+  console.log(color.white('- Full app start: npm run mern:start'));
   console.log(color.white('- Backend helper: cd server && npm run mern:docs'));
   console.log(color.white('- Demo login: demo@mernkit.dev / Password123!'));
 } else if (command === 'help') {

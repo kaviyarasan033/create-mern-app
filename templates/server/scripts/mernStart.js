@@ -1,4 +1,5 @@
 const steps = [
+  '0. From the project root, run npm run mern:start to launch frontend and backend together.',
   '1. Copy server/.env.example to server/.env if needed.',
   '2. Set MONGO_URI, JWT_SECRET, and client URL values.',
   '3. Run npm install if dependencies are not installed.',

@@ -1,0 +1,10 @@
+{
+  "name": "mern-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "mern:start": "node scripts/mernStart.js",
+    "dev": "npm run mern:start",
+    "start": "npm run mern:start"
+  }
+}

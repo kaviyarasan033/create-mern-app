@@ -112,6 +112,8 @@ try {
   console.log(chalk.yellow(`   copy client\\.env.example client\\.env\n`));
 
   console.log(chalk.white(`3. Start development servers:\n`));
+  console.log(chalk.yellow(`   One command: npm run mern:start`));
+  console.log(chalk.yellow(`   Or manually:`));
   console.log(chalk.yellow(`   Terminal 1 (Backend):  cd server && npm run dev`));
   console.log(chalk.yellow(`   Terminal 2 (Frontend): cd client && npm start\n`));
 
