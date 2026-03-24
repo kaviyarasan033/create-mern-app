@@ -17,13 +17,14 @@ It includes a clean MERN MVC structure, auth flow, protected dashboard, docs pag
 - `client/src/context` - auth context and protected flow state
 - `client/src/styles` - responsive docs-style UI system
 
-## Installation
+## Project Creation
 
 ```bash
-npm install
-cd server && npm install
-cd ../client && npm install
+npx create-mern-proapp my-app
+cd my-app
 ```
+
+This generator already gives you the MERN_Solution starter with the inbuilt MVC architecture, frontend, backend, docs page, and command flow.
 
 ## Start The App
 
@@ -170,16 +171,6 @@ Visit `/docs` in the frontend to see:
 - backend model, controller, and route examples
 - generated resource flow after create or migrate
 
-## Git Push Flow
-
-```bash
-git add .
-git commit -m "Setup MERN_Solution project"
-git branch -M main
-git remote add origin https://github.com/your-name/your-repo.git
-git push -u origin main
-```
-
 ## Open `MERN_GUIDE.md`
 
-Use `MERN_GUIDE.md` for a longer guide covering setup, migration, docs flow, and package publishing steps.
+Use `MERN_GUIDE.md` for a longer guide covering setup, migration, docs flow, architecture, and code examples.

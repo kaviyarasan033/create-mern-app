@@ -15,10 +15,9 @@ Create a developer-friendly MERN MVC starter with auth, docs, generator commands
 ```bash
 npx create-mern-proapp my-app
 cd my-app
-npm install
-cd server && npm install
-cd ../client && npm install
 ```
+
+The generator already creates the full MERN_Solution starter with the inbuilt MVC structure, frontend, backend, docs page, and package setup.
 
 ## Run The Project
 
@@ -149,32 +148,17 @@ module.exports = new ProjectController();
 - `templates/README.md` for generated project usage
 - `templates/MERN_GUIDE.md` for the long-form workflow guide
 
-## Git Push Flow
+## Project Purpose
 
-```bash
-git init
-git add .
-git commit -m "Initial MERN_Solution setup"
-git branch -M main
-git remote add origin https://github.com/your-name/your-repo.git
-git push -u origin main
-```
+MERN_Solution is meant to be an inbuilt MVC-style MERN stack solution for developers, inspired by structured frameworks like Laravel.
 
-## npm Publish Flow
+It focuses on:
 
-Before publishing this CLI package:
-
-```bash
-npm login
-npm version patch
-npm publish
-```
-
-Make sure:
-
-- `package.json` has the correct `name`, `version`, `bin`, `files`, and `repository`
-- the README is updated
-- the package builds and installs correctly
+- reusable project structure
+- built-in auth and protected routes
+- generator-based backend workflow
+- frontend docs and developer-friendly examples
+- clean extension flow for new resources
 
 ## License
 
