@@ -5,7 +5,7 @@ import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
-import { FaArrowRight, FaKey, FaLock, FaUserShield } from 'react-icons/fa6';
+import { FaArrowRight, FaCodeBranch, FaKey, FaLock, FaTerminal, FaUserShield } from 'react-icons/fa6';
 
 const Home = () => {
   const [email, setEmail] = useState('');
@@ -40,15 +40,51 @@ const Home = () => {
         className="auth-grid"
       >
         <div className="auth-copy">
-          <span className="eyebrow">Built-in MERN starter</span>
-          <h1>Ship login, routes, controllers, and docs from day one.</h1>
+          <div className="hero-visual-backdrop">
+            <div className="hero-glow hero-glow-one" />
+            <div className="hero-glow hero-glow-two" />
+            <svg className="hero-wireframe" viewBox="0 0 620 420" aria-hidden="true">
+              <defs>
+                <linearGradient id="heroLine" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ffb86c" />
+                  <stop offset="100%" stopColor="#58c6a9" />
+                </linearGradient>
+              </defs>
+              <rect x="20" y="24" width="250" height="142" rx="20" fill="rgba(255,255,255,0.5)" stroke="url(#heroLine)" strokeWidth="2" />
+              <rect x="302" y="70" width="286" height="166" rx="24" fill="rgba(255,255,255,0.38)" stroke="url(#heroLine)" strokeWidth="2" />
+              <rect x="90" y="214" width="240" height="150" rx="22" fill="rgba(255,255,255,0.34)" stroke="url(#heroLine)" strokeWidth="2" />
+              <path d="M270 92C326 92 326 126 382 126" fill="none" stroke="url(#heroLine)" strokeWidth="2.5" strokeDasharray="8 10" />
+              <path d="M210 214C210 186 252 176 288 176C344 176 344 204 404 204" fill="none" stroke="url(#heroLine)" strokeWidth="2.5" strokeDasharray="8 10" />
+              <circle cx="120" cy="95" r="10" fill="#123524" />
+              <circle cx="382" cy="126" r="12" fill="#d98324" />
+              <circle cx="210" cy="214" r="12" fill="#1f5c43" />
+            </svg>
+          </div>
+          <span className="eyebrow">Open source developer products</span>
+          <h1>Ship docs, commands, onboarding, and MERN product pages without changing login.</h1>
           <p>
-            This starter includes JWT auth, MVC folders, a docs endpoint, and generator commands for rapid MERN development.
+            Build API workbenches, code review tools, docs copilots, or internal engineering portals with a frontend that already explains how to install, use, and extend the product.
           </p>
           <div className="feature-list">
             <span><FaUserShield /> JWT auth flow</span>
             <span><FaKey /> Demo login seed</span>
             <span><FaArrowRight /> Built-in migration commands</span>
+            <span><FaTerminal /> Copy-ready command docs</span>
+            <span><FaCodeBranch /> Open source friendly structure</span>
+          </div>
+          <div className="product-preview-grid">
+            <div className="product-preview-card">
+              <strong>AI Review Assistant</strong>
+              <p>PR summaries, risk highlights, and contributor-friendly reporting.</p>
+            </div>
+            <div className="product-preview-card">
+              <strong>API Testing Workbench</strong>
+              <p>Collections, saved environments, and integration-ready commands.</p>
+            </div>
+            <div className="product-preview-card">
+              <strong>Docs Copilot Portal</strong>
+              <p>Usage, setup, implementation, and examples in one frontend surface.</p>
+            </div>
           </div>
           <div className="demo-credentials">
             <strong>Default demo login</strong>

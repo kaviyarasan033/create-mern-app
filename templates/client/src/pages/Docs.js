@@ -1,6 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import { FaBookOpen, FaCode, FaCopy, FaPlay, FaRoute, FaTerminal, FaUserLock, FaWrench } from 'react-icons/fa6';
+import {
+  FaBookOpen,
+  FaCode,
+  FaCopy,
+  FaCube,
+  FaLayerGroup,
+  FaPlay,
+  FaRoute,
+  FaTerminal,
+  FaUserLock,
+  FaWrench
+} from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
 
@@ -10,7 +22,14 @@ const iconMap = {
   routes: <FaRoute />,
   scripts: <FaTerminal />,
   login: <FaUserLock />,
-  controllers: <FaCode />
+  controllers: <FaCode />,
+  products: <FaCube />,
+  frontend: <FaLayerGroup />
+};
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45 } }
 };
 
 function Docs() {
@@ -42,32 +61,40 @@ function Docs() {
   const controllers = Array.isArray(meta?.controllers) ? meta.controllers : [];
   const backendScripts = Array.isArray(meta?.backendScripts) ? meta.backendScripts : [];
   const integration = Array.isArray(meta?.integration) ? meta.integration : [];
+  const products = Array.isArray(meta?.products) ? meta.products : [];
+  const frontendModules = Array.isArray(meta?.frontendModules) ? meta.frontendModules : [];
+  const implementationSteps = Array.isArray(meta?.implementationSteps) ? meta.implementationSteps : [];
+  const usageFlow = Array.isArray(meta?.usageFlow) ? meta.usageFlow : [];
+  const sampleCommands = Array.isArray(meta?.sampleCommands) ? meta.sampleCommands : [];
 
   const copyCommand = async (value) => {
     try {
       await navigator.clipboard.writeText(value);
-      toast.success('Command copied');
+      toast.success('Copied');
     } catch (error) {
-      toast.error('Failed to copy command');
+      toast.error('Copy failed');
     }
   };
 
   const sections = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'products', label: 'Products' },
     { id: 'getting-started', label: 'Get Started' },
-    { id: 'backend-commands', label: 'Backend Commands' },
+    { id: 'commands', label: 'Commands' },
+    { id: 'frontend', label: 'Frontend' },
     { id: 'routes', label: 'Routes' },
-    { id: 'controllers', label: 'Controllers' },
-    { id: 'integration', label: 'Integration' },
+    { id: 'implementation', label: 'Implementation' },
+    { id: 'sample', label: 'Sample' },
     { id: 'default-login', label: 'Demo Login' }
   ];
 
   return (
-    <Container className="docs-container docs-layout">
+    <Container className="docs-container docs-layout docs-studio">
       <aside className="docs-sidebar">
         <div className="docs-sidebar-card">
-          <span className="eyebrow">Docs sidebar</span>
-          <h2>{meta?.app || 'MERN MVC Starter'}</h2>
-          <p>{meta?.appDescription || 'Built-in backend guides, scaffold commands, and migration help.'}</p>
+          <span className="eyebrow">Developer docs</span>
+          <h2>{meta?.app || 'Open Source Dev Suite'}</h2>
+          <p>{meta?.appDescription || 'Complete docs surface for MERN-based developer products.'}</p>
           <div className="docs-sidebar-links">
             {sections.map((section) => (
               <a key={section.id} href={`#${section.id}`}>{section.label}</a>
@@ -77,14 +104,65 @@ function Docs() {
       </aside>
 
       <div className="docs-main">
-        <div className="docs-hero">
-          <span className="eyebrow">Project documentation</span>
-          <h1><FaBookOpen /> Backend help, commands, and integration</h1>
-          <p>Use the generated docs page as your starter manual for installation, migration, resource scaffolding, and route references.</p>
-        </div>
+        <motion.div
+          className="docs-hero docs-hero-rich"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55 }}
+        >
+          <div className="docs-orb docs-orb-one" />
+          <div className="docs-orb docs-orb-two" />
+          <div className="docs-grid-mark" />
+          <span className="eyebrow">Open source product docs</span>
+          <h1><FaBookOpen /> Frontend, commands, usage, and MERN implementation</h1>
+          <p>{meta?.heroTagline || 'Build developer-facing products with a polished MERN foundation.'}</p>
+          <div className="docs-hero-actions">
+            {sampleCommands.map((item) => (
+              <button key={item.command} type="button" className="command-chip" onClick={() => copyCommand(item.command)}>
+                <span>{item.label}</span>
+                <FaCopy />
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
-        <section id="getting-started" className="docs-section">
-          <div className="section-heading">{iconMap.start} Getting started</div>
+        <motion.section id="overview" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.start} Definition</div>
+          <Card className="panel-card panel-rich">
+            <Card.Body>
+              <p className="definition-copy">{meta?.definition}</p>
+              <div className="usage-grid compact-grid">
+                {usageFlow.map((item) => (
+                  <div key={item.title} className="mini-doc-card">
+                    <strong>{item.title}</strong>
+                    <p>{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
+        </motion.section>
+
+        <motion.section id="products" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.products} Product ideas with frontend support</div>
+          <Row className="g-4">
+            {products.map((product) => (
+              <Col key={product.name} md={6}>
+                <Card className="panel-card product-doc-card h-100">
+                  <Card.Body>
+                    <div className="panel-heading">{product.name}</div>
+                    <div className="product-meta">For {product.audience}</div>
+                    <p>{product.summary}</p>
+                    <code>{product.stack}</code>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </motion.section>
+
+        <motion.section id="getting-started" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.start} How to get and use it</div>
           <Row className="g-4">
             {gettingStarted.map((step) => (
               <Col key={step.command} md={6}>
@@ -103,10 +181,10 @@ function Docs() {
               </Col>
             ))}
           </Row>
-        </section>
+        </motion.section>
 
-        <section id="backend-commands" className="docs-section">
-          <div className="section-heading">{iconMap.scripts} Backend commands</div>
+        <motion.section id="commands" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.scripts} Commands and copy blocks</div>
           <Row className="g-4">
             {commandGroups.map(([category, items]) => (
               <Col key={category} xl={6}>
@@ -132,34 +210,28 @@ function Docs() {
               </Col>
             ))}
           </Row>
-        </section>
+        </motion.section>
 
-        <section id="routes" className="docs-section">
-          <div className="section-heading">{iconMap.routes} API routes</div>
-          <Card className="panel-card">
-            <Card.Body>
-              <div className="docs-list">
-                {routes.map((route) => (
-                  <div key={`${route.method}-${route.path}`} className="route-card">
-                    <div>
-                      <code>{route.method}</code> <span>{route.path}</span>
-                    </div>
-                    <small>{route.controller}</small>
-                    <p>{route.description}</p>
-                  </div>
-                ))}
-              </div>
-            </Card.Body>
-          </Card>
-        </section>
-
-        <section id="controllers" className="docs-section">
-          <div className="section-heading">{iconMap.controllers} Controllers and backend scripts</div>
+        <motion.section id="frontend" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.frontend} Frontend modules and content structure</div>
+          <Row className="g-4 mb-4">
+            {frontendModules.map((module) => (
+              <Col key={module.name} md={6}>
+                <Card className="panel-card h-100">
+                  <Card.Body>
+                    <div className="panel-heading">{module.name}</div>
+                    <p>{module.purpose}</p>
+                    <code>{module.file}</code>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
           <Row className="g-4">
             <Col lg={6}>
               <Card className="panel-card h-100">
                 <Card.Body>
-                  <div className="panel-heading">Controllers</div>
+                  <div className="panel-heading">Backend controllers</div>
                   <div className="docs-list">
                     {controllers.map((controller) => (
                       <div key={controller.name}>
@@ -188,33 +260,103 @@ function Docs() {
               </Card>
             </Col>
           </Row>
-        </section>
+        </motion.section>
 
-        <section id="integration" className="docs-section">
-          <div className="section-heading">{iconMap.generators} Integration guide</div>
+        <motion.section id="routes" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.routes} API routes and integration values</div>
           <Row className="g-4">
-            {integration.map((item) => (
-              <Col key={item.command} md={6}>
-                <Card className="panel-card h-100">
-                  <Card.Body>
-                    <div className="command-card-head">
-                      <strong>{item.title}</strong>
-                      <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(item.command)}>
-                        <FaCopy /> Copy
-                      </Button>
-                    </div>
-                    <code>{item.command}</code>
-                    <p>{item.description}</p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+            <Col lg={7}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="docs-list">
+                    {routes.map((route) => (
+                      <div key={`${route.method}-${route.path}`} className="route-card">
+                        <div>
+                          <code>{route.method}</code> <span>{route.path}</span>
+                        </div>
+                        <small>{route.controller}</small>
+                        <p>{route.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={5}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="panel-heading">How to integrate</div>
+                  <div className="command-stack">
+                    {integration.map((item) => (
+                      <div key={item.command} className="command-card">
+                        <div className="command-card-head">
+                          <strong>{item.title}</strong>
+                          <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(item.command)}>
+                            <FaCopy /> Copy
+                          </Button>
+                        </div>
+                        <code>{item.command}</code>
+                        <p>{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
           </Row>
-        </section>
+        </motion.section>
 
-        <section id="default-login" className="docs-section">
+        <motion.section id="implementation" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.generators} Implementation steps</div>
+          <Card className="panel-card panel-rich">
+            <Card.Body>
+              <div className="implementation-flow">
+                {implementationSteps.map((step, index) => (
+                  <div key={step} className="implementation-step">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <p>{step}</p>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
+        </motion.section>
+
+        <motion.section id="sample" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+          <div className="section-heading">{iconMap.controllers} Sample command and API response</div>
+          <Row className="g-4">
+            <Col lg={6}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="command-card-head">
+                    <strong>{meta?.sampleApi?.title || 'Sample request'}</strong>
+                    <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(meta?.sampleApi?.command || '')}>
+                      <FaCopy /> Copy
+                    </Button>
+                  </div>
+                  <pre className="docs-code-block"><code>{meta?.sampleApi?.command}</code></pre>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={6}>
+              <Card className="panel-card h-100">
+                <Card.Body>
+                  <div className="command-card-head">
+                    <strong>Expected response</strong>
+                    <Button variant="outline-secondary" size="sm" onClick={() => copyCommand(meta?.sampleApi?.response || '')}>
+                      <FaCopy /> Copy
+                    </Button>
+                  </div>
+                  <pre className="docs-code-block"><code>{meta?.sampleApi?.response}</code></pre>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </motion.section>
+
+        <motion.section id="default-login" className="docs-section" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
           <div className="section-heading">{iconMap.login} Default login</div>
-          <Card className="panel-card">
+          <Card className="panel-card panel-rich">
             <Card.Body>
               <div className="docs-list">
                 <div><strong>Email</strong> <code>{meta?.defaultLogin?.email || 'demo@mernkit.dev'}</code></div>
@@ -223,7 +365,7 @@ function Docs() {
               </div>
             </Card.Body>
           </Card>
-        </section>
+        </motion.section>
       </div>
     </Container>
   );
