@@ -46,16 +46,27 @@ cd server && npm run seed:demo
 Run these from the generated project root:
 
 ```bash
-node proapp help
-node proapp docs
-node proapp make:controller Project
-node proapp make:model Project
-node proapp make:middleware auditTrail
-node proapp make:route projects
-node proapp make:config cache
-node proapp make:resource project
-node proapp make:module project
-node proapp mern:migrate ProjectController.js
+node mern help
+node mern docs
+node mern make:controller Project
+node mern make:model Project
+node mern make:middleware auditTrail
+node mern make:route projects
+node mern make:config cache
+node mern make:resource project
+node mern make:module project
+node mern mern:migrate ProjectController.js
+node mern cache:clear
+node mern config:clear
+node mern optimize:clear
+```
+
+Cache helpers:
+
+```bash
+npm run cache:clear
+npm run config:clear
+npm run optimize:clear
 ```
 
 ## Generated Server Scripts
@@ -72,7 +83,7 @@ cd server && npm run seed:demo
 ### 1. Generate a resource
 
 ```bash
-node proapp make:resource project
+node mern make:resource project
 ```
 
 This now scaffolds:

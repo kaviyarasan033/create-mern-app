@@ -53,15 +53,26 @@ cd server && npm run seed:demo
 ## 6. Generator Commands
 
 ```bash
-node proapp help
-node proapp docs
-node proapp make:controller Project
-node proapp make:model Project
-node proapp make:middleware auditTrail
-node proapp make:route projects
-node proapp make:config cache
-node proapp make:resource project
-node proapp make:module project
+node mern help
+node mern docs
+node mern make:controller Project
+node mern make:model Project
+node mern make:middleware auditTrail
+node mern make:route projects
+node mern make:config cache
+node mern make:resource project
+node mern make:module project
+node mern cache:clear
+node mern config:clear
+node mern optimize:clear
+```
+
+## 6A. Cache And Optimize Commands
+
+```bash
+npm run cache:clear
+npm run config:clear
+npm run optimize:clear
 ```
 
 ## 7. Migration Commands
@@ -71,7 +82,7 @@ Use these when you are moving an older backend into this structure:
 ```bash
 cd server && npm run mern:docs
 cd server && npm run mern:migrate -- ProjectController.js
-node proapp mern:migrate ProjectController.js
+node mern mern:migrate ProjectController.js
 ```
 
 ## 8. Full Example After `make:resource project`

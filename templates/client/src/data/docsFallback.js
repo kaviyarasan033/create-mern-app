@@ -54,9 +54,12 @@ const docsFallback = {
     { title: 'Run frontend', command: 'cd my-app/client && npm run dev', description: 'Start the React frontend.', category: 'Run' },
     { title: 'Run backend', command: 'cd my-app/server && npm run dev', description: 'Start the Express server.', category: 'Run' },
     { title: 'Seed demo login', command: 'cd my-app/server && npm run seed:demo', description: 'Create demo credentials for testing.', category: 'Run' },
-    { title: 'Create resource', command: 'node proapp make:resource project', description: 'Generate model, controller, route, and migration together.', category: 'Generators' },
-    { title: 'Create module', command: 'node proapp make:module project', description: 'Generate the full backend scaffold in one command.', category: 'Generators' },
-    { title: 'Create controller', command: 'node proapp make:controller Project', description: 'Generate a backend controller.', category: 'Generators' },
+    { title: 'Create resource', command: 'node mern make:resource project', description: 'Generate model, controller, route, and migration together.', category: 'Generators' },
+    { title: 'Create module', command: 'node mern make:module project', description: 'Generate the full backend scaffold in one command.', category: 'Generators' },
+    { title: 'Create controller', command: 'node mern make:controller Project', description: 'Generate a backend controller.', category: 'Generators' },
+    { title: 'Clear cache', command: 'npm run cache:clear', description: 'Clear generated frontend and backend runtime caches.', category: 'Maintenance' },
+    { title: 'Clear config cache', command: 'npm run config:clear', description: 'Clear generated config cache folders for the whole MERN app.', category: 'Maintenance' },
+    { title: 'Optimize clear', command: 'npm run optimize:clear', description: 'Run both cache clear and config clear for frontend and backend.', category: 'Maintenance' },
     { title: 'Build frontend', command: 'cd my-app/client && npm run build', description: 'Create a production frontend build.', category: 'Release' }
   ],
   gettingStarted: [
@@ -69,6 +72,7 @@ const docsFallback = {
     { title: 'Mongo connection', command: 'MONGO_URI=mongodb://127.0.0.1:27017/mern_solution', description: 'Point the server to your MongoDB instance.' },
     { title: 'Frontend API base', command: 'VITE_API_BASE_URL=http://localhost:5000', description: 'Set the frontend API base URL for local development.' },
     { title: 'Backend docs', command: 'cd my-app/server && npm run mern:docs', description: 'Print backend scripts and structure notes.' },
+    { title: 'Optimize clear', command: 'npm run optimize:clear', description: 'Clear cache and config artifacts across the full MERN workspace.' },
     { title: 'Targeted migration', command: 'cd my-app/server && npm run mern:migrate -- ProjectController.js', description: 'Review migration help for a backend file.' }
   ],
   implementationSteps: [
@@ -136,7 +140,8 @@ const docsFallback = {
     { label: 'Generate', command: 'npx create-mern-proapp mern_solution' },
     { label: 'API', command: 'cd mern_solution/server && npm run dev' },
     { label: 'UI', command: 'cd mern_solution/client && npm run dev' },
-    { label: 'Build', command: 'cd mern_solution/client && npm run build' }
+    { label: 'Build', command: 'cd mern_solution/client && npm run build' },
+    { label: 'Clear', command: 'cd mern_solution && npm run optimize:clear' }
   ],
   sampleApi: {
     title: 'Sample login request',
@@ -145,6 +150,9 @@ const docsFallback = {
   },
   backendScripts: [
     { name: 'npm run dev', description: 'Start the backend with nodemon.' },
+    { name: 'npm run cache:clear', description: 'Clear MERN runtime cache folders.' },
+    { name: 'npm run config:clear', description: 'Clear generated config cache folders.' },
+    { name: 'npm run optimize:clear', description: 'Run cache clear and config clear together.' },
     { name: 'npm run seed:demo', description: 'Seed the default demo credentials.' },
     { name: 'npm run mern:docs', description: 'Print backend docs and generators.' },
     { name: 'npm run mern:migrate -- ProjectController.js', description: 'Print migration guidance for a target file.' }

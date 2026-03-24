@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const { runOptimizeClear } = require('./scripts/mernOptimizeClear');
 
 const command = process.argv[2];
 const name = process.argv[3];
@@ -101,26 +102,29 @@ function migrationFileName(resourceName) {
 }
 
 function printHelp() {
-  console.log(color.bold('ProApp CLI - Backend Commands'));
+  console.log(color.bold('MERN CLI - Backend Commands'));
   console.log(color.white('Scaffold backend files, inspect docs, and follow MERN migration steps.'));
   console.log(color.white(`Project root: ${projectRoot}`));
   console.log(color.white(`Server root: ${serverPath}`));
   console.log('');
   console.log(color.yellow('Scaffold commands'));
-  console.log(color.cyan('  node proapp make:controller Project'));
-  console.log(color.cyan('  node proapp make:model Project'));
-  console.log(color.cyan('  node proapp make:middleware auditTrail'));
-  console.log(color.cyan('  node proapp make:route projects'));
-  console.log(color.cyan('  node proapp make:config cache'));
-  console.log(color.cyan('  node proapp make:resource project'));
-  console.log(color.cyan('  node proapp make:module project'));
+  console.log(color.cyan('  node mern make:controller Project'));
+  console.log(color.cyan('  node mern make:model Project'));
+  console.log(color.cyan('  node mern make:middleware auditTrail'));
+  console.log(color.cyan('  node mern make:route projects'));
+  console.log(color.cyan('  node mern make:config cache'));
+  console.log(color.cyan('  node mern make:resource project'));
+  console.log(color.cyan('  node mern make:module project'));
+  console.log(color.cyan('  node mern cache:clear'));
+  console.log(color.cyan('  node mern config:clear'));
+  console.log(color.cyan('  node mern optimize:clear'));
   console.log('');
   console.log(color.yellow('Docs and migration'));
   console.log(color.cyan('  npm run mern:start'));
-  console.log(color.cyan('  node proapp docs'));
-  console.log(color.cyan('  node proapp help'));
-  console.log(color.cyan('  node proapp migrate:mern [ControllerName.js]'));
-  console.log(color.cyan('  node proapp mern:migrate [ControllerName.js]'));
+  console.log(color.cyan('  node mern docs'));
+  console.log(color.cyan('  node mern help'));
+  console.log(color.cyan('  node mern migrate:mern [ControllerName.js]'));
+  console.log(color.cyan('  node mern mern:migrate [ControllerName.js]'));
   console.log(color.cyan('  cd server && npm run mern:start'));
   console.log(color.cyan('  cd server && npm run mern:docs'));
 }
@@ -327,16 +331,21 @@ if (command === 'make:controller' && name) {
   console.log(color.white('- Frontend docs page: /docs'));
   console.log(color.white('- Guide file: MERN_GUIDE.md'));
   console.log(color.white('- Full app start: npm run mern:start'));
+  console.log(color.white('- Clear all caches: npm run optimize:clear'));
+  console.log(color.white('- Clear config cache: npm run config:clear'));
+  console.log(color.white('- Clear runtime cache: npm run cache:clear'));
   console.log(color.white('- Backend helper: cd server && npm run mern:docs'));
   console.log(color.white('- Demo login: demo@mernkit.dev / Password123!'));
 } else if (command === 'help') {
   printHelp();
 } else if (command === 'migrate:mern' || command === 'mern:migrate') {
   printMigrationChecklist(name);
+} else if (command === 'cache:clear' || command === 'config:clear' || command === 'optimize:clear') {
+  runOptimizeClear(command);
 } else {
   if (command) {
     console.log(color.red(`Command not found: ${command}`));
-    console.log(color.yellow('Run `node proapp help` to see available backend commands.'));
+    console.log(color.yellow('Run `node mern help` to see available backend commands.'));
     console.log('');
   }
   printHelp();

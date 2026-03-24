@@ -58,12 +58,15 @@ const Dashboard = () => {
   ];
 
   const commandBlocks = [
-    'node proapp make:controller Project',
-    'node proapp make:model Project',
-    'node proapp make:config cache',
-    'node proapp make:resource project',
-    'node proapp make:module project',
-    'node proapp make:route projects',
+    'node mern make:controller Project',
+    'node mern make:model Project',
+    'node mern make:config cache',
+    'node mern make:resource project',
+    'node mern make:module project',
+    'node mern make:route projects',
+    'node mern cache:clear',
+    'node mern config:clear',
+    'node mern optimize:clear',
     'cd server && npm run mern:docs',
     'cd server && npm run mern:migrate -- ProjectController.js',
     'cd server && npm run seed:demo'

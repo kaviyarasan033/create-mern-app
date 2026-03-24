@@ -73,7 +73,7 @@ try {
   console.log(chalk.white('   - server/middleware       (Auth & Validation)'));
   console.log(chalk.white('   - server/config           (DB & Logger)'));
   console.log(chalk.white('   - server/scripts          (Seed + migration helpers)'));
-  console.log(chalk.white('   - proapp / proapp.js      (In-built CLI)'));
+  console.log(chalk.white('   - mern / mern.js          (In-built CLI)'));
 
   console.log(chalk.cyan('\n🛡️ Built-in features:'));
   console.log(chalk.white('   - Helmet & XSS Protection'));
@@ -120,15 +120,18 @@ try {
   console.log(chalk.white(`4. Seed the default login (optional):\n`));
   console.log(chalk.yellow(`   cd server && npm run seed:demo\n`));
 
-  console.log(chalk.white(`5. Use the ProApp CLI (Inside project root):\n`));
-  console.log(chalk.yellow(`   node proapp make:controller MyController`));
-  console.log(chalk.yellow(`   node proapp make:model MyModel`));
-  console.log(chalk.yellow(`   node proapp make:config cache`));
-  console.log(chalk.yellow(`   node proapp make:resource project`));
-  console.log(chalk.yellow(`   node proapp make:module project`));
-  console.log(chalk.yellow(`   node proapp make:route my-resource`));
-  console.log(chalk.yellow(`   node proapp help`));
-  console.log(chalk.yellow(`   node proapp mern:migrate ProjectController.js`));
+  console.log(chalk.white(`5. Use the MERN CLI (Inside project root):\n`));
+  console.log(chalk.yellow(`   node mern make:controller MyController`));
+  console.log(chalk.yellow(`   node mern make:model MyModel`));
+  console.log(chalk.yellow(`   node mern make:config cache`));
+  console.log(chalk.yellow(`   node mern make:resource project`));
+  console.log(chalk.yellow(`   node mern make:module project`));
+  console.log(chalk.yellow(`   node mern make:route my-resource`));
+  console.log(chalk.yellow(`   node mern cache:clear`));
+  console.log(chalk.yellow(`   node mern config:clear`));
+  console.log(chalk.yellow(`   node mern optimize:clear`));
+  console.log(chalk.yellow(`   node mern help`));
+  console.log(chalk.yellow(`   node mern mern:migrate ProjectController.js`));
   console.log(chalk.yellow(`   cd server && npm run mern:docs`));
 
   console.log(chalk.green.bold(`Happy coding! 🎉\n`));

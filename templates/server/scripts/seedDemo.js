@@ -36,7 +36,7 @@ async function seed() {
       },
       {
         name: 'Migration Checklist',
-        description: 'Use the MERN guide and proapp commands to continue building.',
+        description: 'Use the MERN guide and mern commands to continue building.',
         status: 'draft',
         user: user._id
       }

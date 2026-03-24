@@ -53,16 +53,27 @@ cd server && npm run seed:demo
 Run from the project root:
 
 ```bash
-node proapp help
-node proapp docs
-node proapp make:controller Project
-node proapp make:model Project
-node proapp make:middleware auditLog
-node proapp make:route projects
-node proapp make:config cache
-node proapp make:resource project
-node proapp make:module project
-node proapp mern:migrate ProjectController.js
+node mern help
+node mern docs
+node mern make:controller Project
+node mern make:model Project
+node mern make:middleware auditLog
+node mern make:route projects
+node mern make:config cache
+node mern make:resource project
+node mern make:module project
+node mern mern:migrate ProjectController.js
+node mern cache:clear
+node mern config:clear
+node mern optimize:clear
+```
+
+Cache helpers:
+
+```bash
+npm run cache:clear
+npm run config:clear
+npm run optimize:clear
 ```
 
 ## Server Scripts
@@ -72,6 +83,7 @@ cd server && npm run mern:start
 cd server && npm run mern:docs
 cd server && npm run mern:migrate -- ProjectController.js
 cd server && npm run seed:demo
+cd server && npm run optimize:clear
 ```
 
 ## Full Resource Workflow
@@ -79,7 +91,7 @@ cd server && npm run seed:demo
 ### Create a resource
 
 ```bash
-node proapp make:resource project
+node mern make:resource project
 ```
 
 Expected backend files:

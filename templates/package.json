@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "mern:start": "node scripts/mernStart.js",
+    "cache:clear": "node scripts/mernOptimizeClear.js cache:clear",
+    "config:clear": "node scripts/mernOptimizeClear.js config:clear",
+    "optimize:clear": "node scripts/mernOptimizeClear.js optimize:clear",
     "dev": "npm run mern:start",
     "start": "npm run mern:start"
   }
