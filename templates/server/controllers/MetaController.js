@@ -61,7 +61,8 @@ class MetaController extends Controller {
         { title: 'Run frontend', command: 'cd my-app/client && npm run dev', description: 'Start the React frontend.', category: 'Run' },
         { title: 'Run backend', command: 'cd my-app/server && npm run dev', description: 'Start the Express server.', category: 'Run' },
         { title: 'Seed demo login', command: 'cd my-app/server && npm run seed:demo', description: 'Create demo credentials for testing.', category: 'Run' },
-        { title: 'Create resource', command: 'node proapp make:resource project', description: 'Generate model, controller, and route together.', category: 'Generators' },
+        { title: 'Create resource', command: 'node proapp make:resource project', description: 'Generate model, controller, route, and migration together.', category: 'Generators' },
+        { title: 'Create module', command: 'node proapp make:module project', description: 'Generate the full backend scaffold in one command.', category: 'Generators' },
         { title: 'Create controller', command: 'node proapp make:controller Project', description: 'Generate a backend controller.', category: 'Generators' },
         { title: 'Create model', command: 'node proapp make:model Project', description: 'Generate a backend model.', category: 'Generators' },
         { title: 'Build frontend', command: 'cd my-app/client && npm run build', description: 'Create a production frontend build.', category: 'Release' }

@@ -61,6 +61,7 @@ node proapp make:middleware auditLog
 node proapp make:route projects
 node proapp make:config cache
 node proapp make:resource project
+node proapp make:module project
 node proapp mern:migrate ProjectController.js
 ```
 
@@ -86,6 +87,7 @@ Expected backend files:
 - `server/models/Project.js`
 - `server/controllers/ProjectController.js`
 - `server/routes/projects.js`
+- `server/migrations/<timestamp>-create-project.js`
 
 ### Register the route
 

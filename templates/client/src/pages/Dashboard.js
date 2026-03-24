@@ -62,6 +62,7 @@ const Dashboard = () => {
     'node proapp make:model Project',
     'node proapp make:config cache',
     'node proapp make:resource project',
+    'node proapp make:module project',
     'node proapp make:route projects',
     'cd server && npm run mern:docs',
     'cd server && npm run mern:migrate -- ProjectController.js',

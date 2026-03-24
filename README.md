@@ -54,6 +54,7 @@ node proapp make:middleware auditTrail
 node proapp make:route projects
 node proapp make:config cache
 node proapp make:resource project
+node proapp make:module project
 node proapp mern:migrate ProjectController.js
 ```
 
@@ -74,11 +75,19 @@ cd server && npm run seed:demo
 node proapp make:resource project
 ```
 
+This now scaffolds:
+
+- `server/models/Project.js`
+- `server/controllers/ProjectController.js`
+- `server/routes/projects.js`
+- `server/migrations/<timestamp>-create-project.js`
+
 ### 2. Complete the backend files
 
 - `server/models/Project.js`
 - `server/controllers/ProjectController.js`
 - `server/routes/projects.js`
+- `server/migrations/<timestamp>-create-project.js`
 
 ### 3. Register the route in the server
 

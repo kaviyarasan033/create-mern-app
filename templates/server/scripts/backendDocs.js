@@ -17,7 +17,8 @@ const sections = {
     'node ../proapp make:middleware auditTrail',
     'node ../proapp make:route projects',
     'node ../proapp make:config cache',
-    'node ../proapp make:resource project'
+    'node ../proapp make:resource project',
+    'node ../proapp make:module project'
   ]
 };
 

@@ -73,7 +73,7 @@ try {
   console.log(chalk.white('   - server/middleware       (Auth & Validation)'));
   console.log(chalk.white('   - server/config           (DB & Logger)'));
   console.log(chalk.white('   - server/scripts          (Seed + migration helpers)'));
-  console.log(chalk.white('   - proapp.js               (In-built CLI)'));
+  console.log(chalk.white('   - proapp / proapp.js      (In-built CLI)'));
 
   console.log(chalk.cyan('\n🛡️ Built-in features:'));
   console.log(chalk.white('   - Helmet & XSS Protection'));
@@ -125,6 +125,7 @@ try {
   console.log(chalk.yellow(`   node proapp make:model MyModel`));
   console.log(chalk.yellow(`   node proapp make:config cache`));
   console.log(chalk.yellow(`   node proapp make:resource project`));
+  console.log(chalk.yellow(`   node proapp make:module project`));
   console.log(chalk.yellow(`   node proapp make:route my-resource`));
   console.log(chalk.yellow(`   node proapp help`));
   console.log(chalk.yellow(`   node proapp mern:migrate ProjectController.js`));

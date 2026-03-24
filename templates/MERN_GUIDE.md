@@ -61,6 +61,7 @@ node proapp make:middleware auditTrail
 node proapp make:route projects
 node proapp make:config cache
 node proapp make:resource project
+node proapp make:module project
 ```
 
 ## 7. Migration Commands
@@ -81,6 +82,7 @@ Expected files:
 server/controllers/ProjectController.js
 server/models/Project.js
 server/routes/projects.js
+server/migrations/<timestamp>-create-project.js
 ```
 
 ### Sample model

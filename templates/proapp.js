@@ -4,7 +4,13 @@ const path = require('path');
 
 const command = process.argv[2];
 const name = process.argv[3];
-const serverPath = path.join(process.cwd(), 'server');
+const currentDir = process.cwd();
+const serverPath = path.basename(currentDir).toLowerCase() === 'server'
+  ? currentDir
+  : path.join(currentDir, 'server');
+const projectRoot = path.basename(currentDir).toLowerCase() === 'server'
+  ? path.dirname(currentDir)
+  : currentDir;
 const color = {
   bold: (value) => value,
   cyan: (value) => value,
@@ -20,6 +26,48 @@ function toPascal(value) {
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join('');
+}
+
+function toCamel(value) {
+  const pascal = toPascal(value);
+  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+}
+
+function toKebab(value) {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+function toPlural(value) {
+  const normalized = toKebab(value);
+
+  if (normalized.endsWith('ies') || normalized.endsWith('ses')) {
+    return normalized;
+  }
+
+  if (normalized.endsWith('y')) {
+    return `${normalized.slice(0, -1)}ies`;
+  }
+
+  if (/(s|x|z|ch|sh)$/.test(normalized)) {
+    return `${normalized}es`;
+  }
+
+  if (normalized.endsWith('s')) {
+    return normalized;
+  }
+
+  return `${normalized}s`;
+}
+
+function ensureServerRoot() {
+  if (!fs.existsSync(serverPath)) {
+    console.log(color.red(`Server directory not found: ${serverPath}`));
+    console.log(color.yellow('Run this command from the project root or from inside `server`.'));
+    process.exit(1);
+  }
 }
 
 function ensureDir(dirPath) {
@@ -47,9 +95,16 @@ function createFileIfMissing(dirName, fileName, contents) {
   return { filePath, created: false };
 }
 
+function migrationFileName(resourceName) {
+  const stamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+  return `${stamp}-create-${toKebab(resourceName)}.js`;
+}
+
 function printHelp() {
   console.log(color.bold('ProApp CLI - Backend Commands'));
   console.log(color.white('Scaffold backend files, inspect docs, and follow MERN migration steps.'));
+  console.log(color.white(`Project root: ${projectRoot}`));
+  console.log(color.white(`Server root: ${serverPath}`));
   console.log('');
   console.log(color.yellow('Scaffold commands'));
   console.log(color.cyan('  node proapp make:controller Project'));
@@ -58,6 +113,7 @@ function printHelp() {
   console.log(color.cyan('  node proapp make:route projects'));
   console.log(color.cyan('  node proapp make:config cache'));
   console.log(color.cyan('  node proapp make:resource project'));
+  console.log(color.cyan('  node proapp make:module project'));
   console.log('');
   console.log(color.yellow('Docs and migration'));
   console.log(color.cyan('  npm run mern:start'));
@@ -85,12 +141,26 @@ function printMigrationChecklist(targetFile) {
 }
 
 const templates = {
-  controller: (resourceName) => `const Controller = require('./Controller');
+  controller: (resourceName) => {
+    const variableName = toCamel(resourceName);
+    return `const Controller = require('./Controller');
+const ${resourceName} = require('../models/${resourceName}');
 
 class ${resourceName}Controller extends Controller {
   async index(req, res) {
     try {
-      this.sendResponse(res, [], 'Fetched successfully');
+      const records = await ${resourceName}.find().sort({ createdAt: -1 });
+      this.sendResponse(res, records, '${resourceName} list fetched successfully');
+    } catch (err) {
+      this.sendError(res, err);
+    }
+  }
+
+  async show(req, res) {
+    try {
+      const ${variableName} = await ${resourceName}.findById(req.params.id);
+      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, ${variableName}, '${resourceName} fetched successfully');
     } catch (err) {
       this.sendError(res, err);
     }
@@ -98,19 +168,61 @@ class ${resourceName}Controller extends Controller {
 
   async store(req, res) {
     try {
-      this.sendResponse(res, req.body, 'Created successfully', 201);
+      const ${variableName} = await ${resourceName}.create({
+        name: req.body.name,
+        description: req.body.description,
+        status: req.body.status
+      });
+
+      this.sendResponse(res, ${variableName}, '${resourceName} created successfully', 201);
+    } catch (err) {
+      this.sendError(res, err);
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const ${variableName} = await ${resourceName}.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: req.body.name,
+          description: req.body.description,
+          status: req.body.status
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, ${variableName}, '${resourceName} updated successfully');
+    } catch (err) {
+      this.sendError(res, err);
+    }
+  }
+
+  async destroy(req, res) {
+    try {
+      const ${variableName} = await ${resourceName}.findByIdAndDelete(req.params.id);
+      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, ${variableName}, '${resourceName} deleted successfully');
     } catch (err) {
       this.sendError(res, err);
     }
   }
 }
 
-module.exports = new ${resourceName}Controller();`,
+module.exports = new ${resourceName}Controller();`;
+  },
 
   model: (resourceName) => `const mongoose = require('mongoose');
 
 const ${resourceName}Schema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
+  description: { type: String, default: '' },
+  status: {
+    type: String,
+    enum: ['draft', 'active', 'archived'],
+    default: 'draft'
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('${resourceName}', ${resourceName}Schema);`,
@@ -121,23 +233,64 @@ module.exports = mongoose.model('${resourceName}', ${resourceName}Schema);`,
 
 module.exports = ${resourceName};`,
 
-  route: (resourceName) => `const express = require('express');
+  route: (resourceName, routeName) => `const express = require('express');
 
 const router = express.Router();
-const ${toPascal(resourceName)}Controller = require('../controllers/${toPascal(resourceName)}Controller');
+const auth = require('../middleware/authMiddleware');
+const ${resourceName}Controller = require('../controllers/${resourceName}Controller');
 
-router.get('/', ${toPascal(resourceName)}Controller.index.bind(${toPascal(resourceName)}Controller));
-router.post('/', ${toPascal(resourceName)}Controller.store.bind(${toPascal(resourceName)}Controller));
+router.get('/', auth, ${resourceName}Controller.index.bind(${resourceName}Controller));
+router.get('/:id', auth, ${resourceName}Controller.show.bind(${resourceName}Controller));
+router.post('/', auth, ${resourceName}Controller.store.bind(${resourceName}Controller));
+router.put('/:id', auth, ${resourceName}Controller.update.bind(${resourceName}Controller));
+router.delete('/:id', auth, ${resourceName}Controller.destroy.bind(${resourceName}Controller));
 
 module.exports = router;`,
 
   config: (resourceName) => `module.exports = {
   ${resourceName}: {
     enabled: true,
-    description: '${resourceName} configuration',
+    description: '${resourceName} configuration'
+  }
+};`,
+
+  migration: (resourceName) => `module.exports = {
+  async up() {
+    return {
+      name: '${resourceName}',
+      description: 'Create the ${resourceName} collection indexes or seed defaults here.'
+    };
   },
+
+  async down() {
+    return {
+      name: '${resourceName}',
+      description: 'Rollback logic for ${resourceName} goes here.'
+    };
+  }
 };`
 };
+
+function createResource(resourceInput) {
+  const resourceName = toPascal(resourceInput);
+  const routeName = toPlural(resourceInput);
+  const files = [
+    createFileIfMissing('models', `${resourceName}.js`, templates.model(resourceName)),
+    createFileIfMissing('controllers', `${resourceName}Controller.js`, templates.controller(resourceName)),
+    createFileIfMissing('routes', `${routeName}.js`, templates.route(resourceName, routeName)),
+    createFileIfMissing('migrations', migrationFileName(resourceName), templates.migration(resourceName))
+  ];
+
+  files.forEach(({ filePath, created }) => {
+    const output = created ? color.green : color.yellow;
+    const prefix = created ? '✓ Created' : '• Exists';
+    console.log(output(`${prefix}: ${filePath}`));
+  });
+
+  console.log(color.cyan(`Register route with: app.use('/api/${routeName}', require('./routes/${routeName}'));`));
+}
+
+ensureServerRoot();
 
 if (command === 'make:controller' && name) {
   const resourceName = toPascal(name);
@@ -151,9 +304,10 @@ if (command === 'make:controller' && name) {
   const filePath = writeTemplate('middleware', `${name}.js`, templates.middleware(name));
   console.log(color.green(`✓ Middleware created: ${filePath}`));
 } else if (command === 'make:route' && name) {
-  const resourceName = toPascal(name);
+  const resourceName = toPascal(name.replace(/s$/i, ''));
+  const routeName = toPlural(name);
   const controllerName = `${resourceName}Controller.js`;
-  const routeFilePath = writeTemplate('routes', `${name}.js`, templates.route(name));
+  const routeFilePath = writeTemplate('routes', `${routeName}.js`, templates.route(resourceName, routeName));
   const controllerPath = path.join(serverPath, 'controllers', controllerName);
 
   if (!fs.existsSync(controllerPath)) {
@@ -165,19 +319,8 @@ if (command === 'make:controller' && name) {
 } else if (command === 'make:config' && name) {
   const filePath = writeTemplate('config', `${name}.js`, templates.config(name));
   console.log(color.green(`✓ Config created: ${filePath}`));
-} else if (command === 'make:resource' && name) {
-  const resourceName = toPascal(name);
-  const files = [
-    createFileIfMissing('models', `${resourceName}.js`, templates.model(resourceName)),
-    createFileIfMissing('controllers', `${resourceName}Controller.js`, templates.controller(resourceName)),
-    createFileIfMissing('routes', `${name}.js`, templates.route(name))
-  ];
-
-  files.forEach(({ filePath, created }) => {
-    const output = created ? color.green : color.yellow;
-    const prefix = created ? '✓ Created' : '• Exists';
-    console.log(output(`${prefix}: ${filePath}`));
-  });
+} else if ((command === 'make:resource' || command === 'make:module') && name) {
+  createResource(name);
 } else if (command === 'docs') {
   console.log(color.bold('MERN MVC Docs'));
   console.log(color.white('- API docs: GET /api/meta'));
