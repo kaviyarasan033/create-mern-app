@@ -1,6 +1,6 @@
 {
   "name": "create-mern-proapp",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Create a production-ready MERN stack MVC project with Google OAuth, enhanced token security, and auto-refresh capabilities",
   "bin": {
     "create-mern-proapp": "./bin/index.js"
