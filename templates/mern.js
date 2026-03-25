@@ -125,9 +125,12 @@ function printHelp() {
   console.log(color.cyan('  node mern help'));
   console.log(color.cyan('  node mern migrate:mern [ControllerName.js]'));
   console.log(color.cyan('  node mern mern:migrate [ControllerName.js]'));
+  console.log(color.cyan('  node mern stack:update'));
+  console.log(color.cyan('  node mern stack:update:now'));
   console.log(color.cyan('  cd server && npm run mern:start'));
   console.log(color.cyan('  cd server && npm run mern:docs'));
 }
+
 
 function printMigrationChecklist(targetFile) {
   console.log(color.bold('MERN migration checklist'));
@@ -340,7 +343,11 @@ if (command === 'make:controller' && name) {
   printHelp();
 } else if (command === 'migrate:mern' || command === 'mern:migrate') {
   printMigrationChecklist(name);
+} else if (command === 'stack:update' || command === 'stack:update:now') {
+  const { runStackUpdate } = require('./scripts/mernUpdate');
+  runStackUpdate(command === 'stack:update:now');
 } else if (command === 'cache:clear' || command === 'config:clear' || command === 'optimize:clear') {
+
   runOptimizeClear(command);
 } else {
   if (command) {

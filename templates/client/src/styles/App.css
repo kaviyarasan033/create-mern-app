@@ -1006,6 +1006,11 @@ textarea.form-control {
 
   .docs-sidebar-panel {
     position: static;
+    margin-bottom: 2rem;
+  }
+
+  .docs-sidebar-card {
+    border-radius: var(--radius-lg);
   }
 
   .product-preview-grid,
@@ -1021,6 +1026,24 @@ textarea.form-control {
   .docs-grid-2,
   .implementation-flow {
     grid-template-columns: 1fr;
+  }
+
+  .docs-sidebar-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .docs-sidebar-button {
+    padding: 0.75rem;
+    border-radius: 14px;
+  }
+
+  .docs-sidebar-button strong {
+    font-size: 0.9rem;
+  }
+
+  .docs-sidebar-button small {
+    display: none;
   }
 
   .premium-navbar .navbar-collapse {
@@ -1073,6 +1096,10 @@ textarea.form-control {
   .dashboard-container {
     padding-left: 0.85rem;
     padding-right: 0.85rem;
+  }
+
+  .docs-sidebar-buttons {
+    grid-template-columns: 1fr;
   }
 
   .auth-copy,
