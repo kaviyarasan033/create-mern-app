@@ -12,6 +12,10 @@ class FirebaseAuthService {
   
   // Sign in with Google
   async signInWithGoogle() {
+    if (!auth) {
+      toast.error('Google authentication is not configured');
+      throw new Error('Firebase Auth not initialized');
+    }
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
@@ -45,6 +49,7 @@ class FirebaseAuthService {
   
   // Sign out
   async signOut() {
+    if (!auth) return;
     try {
       await signOut(auth);
       localStorage.removeItem('token');
@@ -58,16 +63,21 @@ class FirebaseAuthService {
   
   // Listen for auth state changes
   onAuthStateChange(callback) {
+    if (!auth) {
+      // Return a dummy unsubscribe function if auth is not initialized
+      return () => {};
+    }
     return onAuthStateChanged(auth, callback);
   }
   
   // Get current user
   getCurrentUser() {
-    return auth.currentUser;
+    return auth ? auth.currentUser : null;
   }
   
   // Get ID token
   async getIdToken() {
+    if (!auth) return null;
     const user = auth.currentUser;
     if (user) {
       return await getIdToken(user);
@@ -75,6 +85,7 @@ class FirebaseAuthService {
     return null;
   }
 }
+
 
 const firebaseAuthService = new FirebaseAuthService();
 export default firebaseAuthService;

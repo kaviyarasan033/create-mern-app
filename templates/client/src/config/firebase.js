@@ -13,12 +13,18 @@ const firebaseConfig = {
   measurementId: env.VITE_FIREBASE_MEASUREMENT_ID || ''
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 
-// Optional: Add additional scopes if needed
-googleProvider.addScope('email');
-googleProvider.addScope('profile');
+let app, auth, googleProvider;
+
+if (isFirebaseConfigured) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  googleProvider = new GoogleAuthProvider();
+  googleProvider.addScope('email');
+  googleProvider.addScope('profile');
+} else {
+  console.warn('Firebase configuration missing. Firebase features will be disabled.');
+}
 
 export { auth, googleProvider, app };
