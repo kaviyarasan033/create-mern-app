@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Dropdown } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { FaBoxesStacked, FaRightFromBracket, FaCube } from 'react-icons/fa6';
 import '../styles/MernPro.css';
 
 const AppNavbar = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, firebaseUser, logout } = useAuth();
 
   return (
     <motion.div
@@ -26,15 +26,35 @@ const AppNavbar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mern-pro-nav-links mx-auto">
               <Nav.Link as={Link} to="/docs">Documentation</Nav.Link>
-              <Nav.Link href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</Nav.Link>
+              <Nav.Link href="https://github.com/kaviyarasan033/create-mern-app" target="_blank" rel="noopener noreferrer">GitHub</Nav.Link>
             </Nav>
 
             <Nav className="ms-auto align-items-center">
               {isAuthenticated ? (
-                <>
-                  <Nav.Link as={Link} to="/dashboard" className="me-3"><FaBoxesStacked /> Dashboard</Nav.Link>
-                  <Button variant="outline-dark" className="btn-mern-pro-light" onClick={logout}><FaRightFromBracket /> Logout</Button>
-                </>
+                <Dropdown align="end" className="user-dropdown">
+                  <Dropdown.Toggle as="div" className="user-avatar-toggle" style={{ cursor: 'pointer' }}>
+                    {firebaseUser?.photoURL ? (
+                      <img src={firebaseUser.photoURL} alt="User Avatar" className="nav-avatar" />
+                    ) : (
+                      <div className="nav-avatar-fallback">
+                        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                    )}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="shadow-sm border-0 mt-2 rounded-3">
+                    <div className="px-3 py-2 border-bottom mb-2">
+                      <strong className="d-block">{user?.name || firebaseUser?.displayName || 'User'}</strong>
+                      <small className="text-muted d-block text-truncate" style={{ maxWidth: '180px' }}>
+                        {user?.email || firebaseUser?.email || 'user@example.com'}
+                      </small>
+                    </div>
+                    <Dropdown.Item as={Link} to="/dashboard"><FaBoxesStacked className="me-2 text-muted" /> Dashboard</Dropdown.Item>
+                    <Dropdown.Item onClick={logout} className="text-danger mt-1">
+                      <FaRightFromBracket className="me-2" /> Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <Nav.Link as={Link} to="/register" className="p-0">
                   <Button className="btn-mern-pro-dark">

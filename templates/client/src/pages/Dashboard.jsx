@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/apiService';
 import MernToast from '../utils/MernToast';
 import Spinner from '../components/Spinner';
-import { FaArrowRotateRight, FaCirclePlus, FaCodeBranch, FaDatabase, FaShield, FaTrash } from 'react-icons/fa6';
+import { FaArrowRotateRight, FaCirclePlus, FaCodeBranch, FaDatabase, FaShield, FaTrash, FaCopy, FaBookOpen } from 'react-icons/fa6';
 
 const Dashboard = () => {
   const { user, firebaseUser, logout } = useAuth();
@@ -51,25 +51,42 @@ const Dashboard = () => {
     }
   };
 
+  const copyCommand = async (value) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      MernToast('Copied to clipboard');
+    } catch (error) {
+      MernToast('Copy failed', 'error');
+    }
+  };
+
   const dashboardStats = [
     { label: 'items', value: items.length, icon: <FaDatabase /> },
     { label: 'status', value: user?.role || 'member', icon: <FaShield /> },
     { label: 'mode', value: 'protected', icon: <FaCodeBranch /> }
   ];
 
-  const commandBlocks = [
-    'node mern make:controller Project',
-    'node mern make:model Project',
-    'node mern make:config cache',
-    'node mern make:resource project',
-    'node mern make:module project',
-    'node mern make:route projects',
-    'node mern cache:clear',
-    'node mern config:clear',
-    'node mern optimize:clear',
-    'cd server && npm run mern:docs',
-    'cd server && npm run mern:migrate -- ProjectController.js',
-    'cd server && npm run seed:demo'
+  const guideSteps = [
+    {
+      title: '1. Create a logical model',
+      description: 'Generate a MongoDB Mongoose model effortlessly using the CLI tool.',
+      command: 'node mern make:model Product'
+    },
+    {
+      title: '2. Generate the controller',
+      description: 'Create a pre-configured Express controller tied perfectly to your new model.',
+      command: 'node mern make:controller Product'
+    },
+    {
+      title: '3. Attach standard API routes',
+      description: 'Link your backend resource easily. The MERN CLI binds CRUD operations fast.',
+      command: 'node mern make:route products'
+    },
+    {
+      title: '4. Or generate it all instantly',
+      description: 'Use the `make:resource` command to scaffold the Model, Controller, and Routes concurrently.',
+      command: 'node mern make:resource product'
+    }
   ];
 
   return (
@@ -150,16 +167,31 @@ const Dashboard = () => {
             </Col>
 
             <Col lg={7}>
-              <Card className="panel-card h-100">
-                <Card.Body>
-                  <div className="panel-heading"><FaCodeBranch /> Starter commands</div>
+              <Card className="panel-card h-100 border-0 shadow-sm" style={{ borderRadius: '24px' }}>
+                <Card.Body className="p-4 p-md-5">
+                  <div className="panel-heading mb-4 d-flex align-items-center">
+                    <FaBookOpen className="me-2 text-primary" /> 
+                    <h5 className="mb-0 fw-bold">Step-by-Step Guide</h5>
+                  </div>
+                  <p className="text-muted mb-4">Follow this built-in solution guide to quickly scaffold your MERN application.</p>
                   <div className="dashboard-command-board">
-                    {commandBlocks.map((command) => (
-                      <div key={command} className="command-card command-card-visible">
-                        <div className="command-card-head">
-                          <strong>CLI</strong>
+                    {guideSteps.map((step, index) => (
+                      <div key={index} className="command-card command-card-visible mb-4 border rounded-4 p-4 bg-light">
+                        <div className="command-card-head d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                          <strong className="text-dark fs-6">{step.title}</strong>
+                          <Button 
+                            variant="light" 
+                            size="sm" 
+                            className="bg-white border shadow-sm rounded-pill px-3 py-1 text-secondary"
+                            onClick={() => copyCommand(step.command)}
+                          >
+                            <FaCopy className="me-1" /> Copy
+                          </Button>
                         </div>
-                        <pre className="docs-code-block compact-code"><code>{command}</code></pre>
+                        <p className="text-muted mb-3 small">{step.description}</p>
+                        <pre className="docs-code-block compact-code bg-dark text-light p-3 rounded-3 mb-0">
+                          <code>{step.command}</code>
+                        </pre>
                       </div>
                     ))}
                   </div>

@@ -31,7 +31,7 @@ const MernCanvas = () => {
           }
         },
         particles: {
-          color: { value: ["#4CAF50", "#2196F3", "#000000", "#FFEB3B"] },
+          color: { value: ["#4CAF50", "#FFEB3B", "#2196F3"] },
           links: {
             color: "#888888",
             distance: 120,
@@ -58,6 +58,7 @@ const MernCanvas = () => {
         detectRetina: true
       }}
       className="mern-pro-canvas-container"
+      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
     />
   );
 };

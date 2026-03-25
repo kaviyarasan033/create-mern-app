@@ -89,6 +89,44 @@
   background-color: #f1f3f4 !important;
 }
 
+/* Navbar Avatar */
+.user-avatar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.user-avatar-toggle:hover {
+  transform: scale(1.05);
+}
+
+.user-avatar-toggle::after {
+  display: none !important; /* Hide dropdown caret */
+}
+
+.nav-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e8eaed;
+}
+
+.nav-avatar-fallback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4285f4, #ea4335);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: 2px solid #e8eaed;
+}
+
 /* Hero Section */
 .mern-pro-hero {
   position: relative;
