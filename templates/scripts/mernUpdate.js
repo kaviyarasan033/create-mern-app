@@ -23,7 +23,8 @@ function runStackUpdate(force = false) {
     { src: 'mern.js', dest: 'mern.js' },
     { src: 'scripts/mernUpdate.js', dest: 'scripts/mernUpdate.js' },
     { src: 'scripts/mernOptimizeClear.js', dest: 'scripts/mernOptimizeClear.js' },
-    { src: 'scripts/mernStart.js', dest: 'scripts/mernStart.js' }
+    { src: 'scripts/mernStart.js', dest: 'scripts/mernStart.js' },
+    { src: 'client/src/data/docsFallback.js', dest: 'client/src/data/docsFallback.js' }
   ];
 
   let updatedCount = 0;

@@ -90,5 +90,24 @@ npm run config:clear     # Refresh configuration maps
 npm run optimize:clear   # Clean build artifacts for fresh starts
 ```
 
+## 8. Stack Upgrade Strategy
+
+MERN Pro includes a safe synchronization mechanism to keep your project core up to date without overwriting your custom logic.
+
+### Core Architecture Sync
+Running `node mern stack:update` will synchronize:
+- **CLI Logic**: `mern.js` and supporting scripts.
+- **System Docs**: `client/src/data/docsFallback.js`.
+- **Optimization Tools**: Performance and cache clearing scripts.
+
+### Full System Upgrade
+To force a complete synchronization of all MERN Pro core components (useful when a major version patch is released):
+```bash
+node mern stack:update:now
+```
+
+> [!IMPORTANT]
+> Always verify your custom configurations in `.env` and `vite.config.js` after a force upgrade, although MERN Pro is designed to respect user-defined environment values.
+
 ---
 *MERN Pro - Built for developers, by developers.*

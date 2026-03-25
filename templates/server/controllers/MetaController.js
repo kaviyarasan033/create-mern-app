@@ -3,10 +3,10 @@ const Controller = require('./Controller');
 class MetaController extends Controller {
   index(req, res) {
     this.sendResponse(res, {
-      app: 'MERN_Solution',
-      appDescription: 'Clean MERN MVC starter with auth, docs, commands, and responsive developer-facing pages.',
-      heroTagline: 'Use MERN_Solution to launch a clear developer product foundation with setup guidance, commands, and protected workflows.',
-      definition: 'MERN_Solution is a developer-focused MERN starter built with MongoDB, Express, React, and Node.js. It provides a structured MVC backend, authentication flow, protected routes, starter CRUD, and a documentation surface that explains how to install, run, extend, and maintain the project. The goal is to give developers a clean starting point instead of an empty scaffold or a generic admin panel. The frontend is designed to communicate setup steps, command references, architecture notes, and route guidance in a simple responsive layout. The backend is organized so controllers, models, middleware, services, and routes remain easy to scale as the project grows. MERN_Solution is intended for teams and solo developers who want a practical inbuilt solution for building developer tools, internal systems, or product starters with a clear UI and maintainable structure.',
+      app: 'MERN Pro',
+      appDescription: 'Professional MERN MVC stack with integrated auth, developer CLI, and responsive documentation.',
+      heroTagline: 'Launch your next developer product with the MERN Pro foundation—built for scalability, security, and developer speed.',
+      definition: 'MERN Pro is a developer-focused MERN stack solution built with MongoDB, Express, React, and Node.js. It follows a strict MVC (Model-View-Controller) architecture, providing a robust starting point for real-world applications. With built-in JWT authentication, Firebase integration, and a powerful CLI for scaffolding resources, MERN Pro automates the repetitive parts of development. The integrated /docs workspace is self-documenting, reflecting your project\'s API, architecture, and command references in real-time. Whether you\'re building a SaaS, an internal tool, or a complex web app, MERN Pro ensures your codebase remains organized, secure, and easy to maintain.',
       products: [
         {
           name: 'Authentication foundation',
@@ -63,8 +63,8 @@ class MetaController extends Controller {
         { title: 'Seed demo login', command: 'cd my-app/server && npm run seed:demo', description: 'Create demo credentials for testing.', category: 'Run' },
         { title: 'Create resource', command: 'node mern make:resource project', description: 'Generate model, controller, route, and migration together.', category: 'Generators' },
         { title: 'Create module', command: 'node mern make:module project', description: 'Generate the full backend scaffold in one command.', category: 'Generators' },
-        { title: 'Create controller', command: 'node mern make:controller Project', description: 'Generate a backend controller.', category: 'Generators' },
-        { title: 'Create model', command: 'node mern make:model Project', description: 'Generate a backend model.', category: 'Generators' },
+        { title: 'Stack Update', command: 'node mern stack:update', description: 'Safely sync project files with the latest template updates.', category: 'Maintenance' },
+        { title: 'Force Stack Update', command: 'node mern stack:update:now', description: 'Force overwrite core system files to the current version.', category: 'Maintenance' },
         { title: 'Clear cache', command: 'npm run cache:clear', description: 'Clear generated frontend and backend runtime caches.', category: 'Maintenance' },
         { title: 'Clear config cache', command: 'npm run config:clear', description: 'Clear generated config cache folders for the whole MERN app.', category: 'Maintenance' },
         { title: 'Optimize clear', command: 'npm run optimize:clear', description: 'Run both cache clear and config clear for frontend and backend.', category: 'Maintenance' },
@@ -74,14 +74,16 @@ class MetaController extends Controller {
         { title: 'Create project', command: 'npx create-mern-proapp my-app', description: 'Generate the starter and initial folder structure.' },
         { title: 'Configure backend env', command: 'copy server/.env.example server/.env', description: 'Create your backend environment file.' },
         { title: 'Start backend', command: 'cd my-app/server && npm run dev', description: 'Run the API locally.' },
-        { title: 'Start frontend', command: 'cd my-app/client && npm run dev', description: 'Run the React app locally.' },
-        { title: 'Open docs', command: 'http://localhost:5173/docs', description: 'Review setup, commands, routes, architecture, and sample code.' }
+        { title: 'Start frontend', command: 'cd my-app/client && npm run dev', description: 'Run the React app locally on Port 3000.' },
+        { title: 'Stack Update', command: 'node mern stack:update', description: 'Sync your project with latest MERN Pro template changes.' },
+        { title: 'Open docs', command: 'http://localhost:3000/docs', description: 'Review setup, commands, routes, architecture, and sample code.' }
       ],
       integration: [
         { title: 'Environment setup', command: 'copy server/.env.example server/.env', description: 'Create backend environment values before connecting MongoDB.' },
         { title: 'Mongo connection', command: 'MONGO_URI=mongodb://127.0.0.1:27017/mern_solution', description: 'Point the server to a local or hosted MongoDB instance.' },
         { title: 'Frontend API base', command: 'VITE_API_BASE_URL=http://localhost:5000', description: 'Point the React app to the Express backend during development.' },
         { title: 'Backend docs', command: 'cd my-app/server && npm run mern:docs', description: 'List scripts, generators, and backend structure.' },
+        { title: 'Stack Upgrade', command: 'node mern stack:update:now', description: 'Perform a force-upgrade of core system and UI logic safely.' },
         { title: 'Optimize clear', command: 'npm run optimize:clear', description: 'Clear cache and config artifacts across the full MERN workspace.' },
         { title: 'Targeted migration', command: 'cd my-app/server && npm run mern:migrate -- ProjectController.js', description: 'Review migration guidance for a controller or backend file.' }
       ],
