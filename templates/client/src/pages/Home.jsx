@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
-import toast from 'react-hot-toast';
+import MernToast from '../utils/MernToast';
 import api from '../services/apiService';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import {
@@ -32,33 +32,32 @@ const Home = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const loginPromise = api.post('/api/auth/login', { email, password });
-
-    toast.promise(loginPromise, {
-      loading: 'Authenticating...',
-      success: (res) => {
-        login(res.data.data.token, res.data.data.user);
-        return 'Welcome back!';
-      },
-      error: (err) => err.response?.data?.message || 'Login failed'
-    });
+    
+    try {
+      MernToast('Authenticating...', 'success');
+      const res = await api.post('/api/auth/login', { email, password });
+      login(res.data.data.token, res.data.data.user);
+      MernToast('Welcome back!');
+    } catch (err) {
+      MernToast(err.response?.data?.message || 'Login failed', 'error');
+    }
   };
 
   const handleGoogleSuccess = (result) => {
     login(result.token, result.user);
-    toast.success('Google authentication successful!');
+    MernToast('Google authentication successful!');
   };
 
   const handleGoogleError = (error) => {
-    toast.error('Google authentication failed');
+    MernToast('Google authentication failed', 'error');
   };
 
   const copyCommand = async (value) => {
     try {
       await navigator.clipboard.writeText(value);
-      toast.success('Copied to clipboard');
+      MernToast('Copied to clipboard');
     } catch (error) {
-      toast.error('Copy failed');
+      MernToast('Copy failed', 'error');
     }
   };
 

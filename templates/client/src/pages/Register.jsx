@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Form, Button, Card } from 'react-bootstrap';
-import toast from 'react-hot-toast';
+import MernToast from '../utils/MernToast';
 import api from '../services/apiService';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import { FaCircleCheck, FaGoogle, FaIdCard, FaUserPlus } from 'react-icons/fa6';
@@ -13,31 +13,29 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) return toast.error('Passwords do not match');
+    if (formData.password !== formData.confirmPassword) return MernToast('Passwords do not match', 'error');
 
-    const registerPromise = api.post('/api/auth/register', { 
-      name: formData.name, 
-      email: formData.email, 
-      password: formData.password 
-    });
-
-    toast.promise(registerPromise, {
-      loading: 'Creating your account...',
-      success: () => {
-        navigate('/');
-        return 'Account created! Please login.';
-      },
-      error: (err) => err.response?.data?.message || 'Registration failed'
-    });
+    try {
+      MernToast('Creating your account...', 'success');
+      await api.post('/api/auth/register', { 
+        name: formData.name, 
+        email: formData.email, 
+        password: formData.password 
+      });
+      navigate('/');
+      MernToast('Account created! Please login.');
+    } catch (err) {
+      MernToast(err.response?.data?.message || 'Registration failed', 'error');
+    }
   };
 
   const handleGoogleSuccess = (result) => {
-    toast.success('Account created with Google!');
+    MernToast('Account created with Google!');
     navigate('/dashboard');
   };
 
   const handleGoogleError = (error) => {
-    toast.error('Google authentication failed');
+    MernToast('Google authentication failed', 'error');
   };
 
   return (

@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Badge } from 'react-bootstrap'
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/apiService';
-import toast from 'react-hot-toast';
+import MernToast from '../utils/MernToast';
 import Spinner from '../components/Spinner';
 import { FaArrowRotateRight, FaCirclePlus, FaCodeBranch, FaDatabase, FaShield, FaTrash } from 'react-icons/fa6';
 
@@ -22,7 +22,7 @@ const Dashboard = () => {
       const res = await api.get('/api/items');
       setItems(res.data.data);
     } catch (err) {
-      toast.error('Failed to fetch items');
+      MernToast('Failed to fetch items', 'error');
     } finally {
       setLoading(false);
     }
@@ -35,9 +35,9 @@ const Dashboard = () => {
       const res = await api.post('/api/items', formData);
       setItems((current) => [res.data.data, ...current]);
       setFormData({ name: '', description: '', status: 'active' });
-      toast.success('Item created');
+      MernToast('Item created');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to create item');
+      MernToast(err.response?.data?.message || 'Failed to create item', 'error');
     }
   };
 
@@ -45,9 +45,9 @@ const Dashboard = () => {
     try {
       await api.delete(`/api/items/${id}`);
       setItems((current) => current.filter((item) => item._id !== id));
-      toast.success('Item deleted');
+      MernToast('Item deleted');
     } catch (err) {
-      toast.error('Failed to delete item');
+      MernToast('Failed to delete item', 'error');
     }
   };
 

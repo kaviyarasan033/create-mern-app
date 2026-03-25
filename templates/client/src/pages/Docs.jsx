@@ -15,9 +15,11 @@ import {
 } from 'react-icons/fa6';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import toast from 'react-hot-toast';
+import MernToast from '../utils/MernToast';
 import api from '../services/apiService';
 import docsFallback from '../data/docsFallback';
+import MernCanvas from '../components/MernCanvas';
+import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -124,9 +126,9 @@ function Docs() {
   const copyCommand = async (value) => {
     try {
       await navigator.clipboard.writeText(value);
-      toast.success('Copied to clipboard');
+      MernToast('Copied to clipboard');
     } catch (error) {
-      toast.error('Copy failed');
+      MernToast('Copy failed', 'error');
     }
   };
 
@@ -487,75 +489,69 @@ function Docs() {
   };
 
   return (
-    <Container className="docs-container docs-workspace">
-      <div className="docs-shell">
-        <aside className="docs-sidebar-panel">
-          <div className="docs-sidebar-card docs-sidebar-card-strong">
-            <span className="eyebrow">Developer docs</span>
-            <h1>{meta.app}</h1>
-            <p>{meta.appDescription}</p>
-            <div className="docs-sidebar-links docs-sidebar-buttons">
-              {sections.map((section) => (
-                <button
-                  key={section.id}
-                  type="button"
-                  className={`docs-sidebar-button ${activeSection === section.id ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setActiveSection(section.id);
-                    sectionBodyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                >
-                  <span className="sidebar-icon">{iconMap[section.id]}</span>
-                  <span>
-                    <strong>{section.label}</strong>
-                    <small>{section.description}</small>
-                  </span>
-                </button>
-              ))}
-            </div>
+    <div className="mern-pro-page">
+      <header className="mern-pro-hero">
+        <MernCanvas />
+        <div className="mern-pro-hero-content">
+          <div className="mern-pro-title-logo">
+            <span className="mern-pro-logo-icon" style={{fontSize: '1.2rem'}}><FaCube /></span> <strong>MERN Pro</strong>
           </div>
-        </aside>
-
-        <section className="docs-content-panel">
-          <Card className="panel-card docs-hero-card">
-            <Card.Body>
-              <div className="docs-hero-grid">
-                <div>
-                  <span className="eyebrow">Open source product docs</span>
-                  <h2>Responsive commands, modern cards, and backend-aligned structure.</h2>
-                  <p>{meta.heroTagline}</p>
-                  {renderQuickActions()}
-                </div>
-                <div className="docs-hero-stack">
-                  <div className="hero-metric-card">
-                    <span>09</span>
-                    <small>Structured docs sections</small>
-                  </div>
-                  <div className="hero-metric-card">
-                    <span>{(meta.commands || []).length}</span>
-                    <small>Visible command blocks</small>
-                  </div>
-                  <div className="hero-metric-card">
-                    <span>{(meta.routes || []).length}</span>
-                    <small>Backend routes documented</small>
-                  </div>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-
-          <div ref={sectionBodyRef} className="docs-section-panel">
-            <div className="docs-section-header docs-card-animate">
-              <div className="section-heading section-heading-large">
-                {iconMap[activeMeta.id]} {activeMeta.label}
-              </div>
-              <p>{activeMeta.description}</p>
-            </div>
-            {renderActiveSection()}
+          <h1>Professional-grade MERN<br/>boilerplate and CLI</h1>
+          <div className="mern-pro-hero-actions">
+            <Button className="btn-mern-pro-dark" onClick={() => sectionBodyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+              Get Started
+            </Button>
+            <Button as={Link} to="/register" className="btn-mern-pro-light">
+              Create an account
+            </Button>
           </div>
-        </section>
-      </div>
-    </Container>
+        </div>
+      
+      </header>
+
+      <Container className="docs-container mern-pro-mode">
+        <div className="docs-shell">
+          <aside className="docs-sidebar-panel">
+            <div className="docs-sidebar-card docs-sidebar-card-strong">
+              <span className="eyebrow">Developer docs</span>
+              <h2>{meta.app}</h2>
+              <p>{meta.appDescription}</p>
+              <div className="docs-sidebar-links docs-sidebar-buttons">
+                {sections.map((section) => (
+                  <button
+                    key={section.id}
+                    type="button"
+                    className={`docs-sidebar-button ${activeSection === section.id ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setActiveSection(section.id);
+                      sectionBodyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                  >
+                    <span className="sidebar-icon">{iconMap[section.id]}</span>
+                    <span>
+                      <strong>{section.label}</strong>
+                      <small>{section.description}</small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          <section className="docs-content-panel">
+            <div ref={sectionBodyRef} className="docs-section-panel">
+              <div className="docs-section-header docs-card-animate">
+                <div className="section-heading section-heading-large">
+                  {iconMap[activeMeta.id]} {activeMeta.label}
+                </div>
+                <p>{activeMeta.description}</p>
+              </div>
+              {renderActiveSection()}
+            </div>
+          </section>
+        </div>
+      </Container>
+    </div>
   );
 }
 

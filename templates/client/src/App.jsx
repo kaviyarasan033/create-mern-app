@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -14,7 +13,6 @@ function App() {
   return (
     <Router>
       <div className="app-wrapper">
-        <Toaster position="top-center" />
         <AppNavbar />
         <Routes>
           <Route path="/" element={<Home />} />

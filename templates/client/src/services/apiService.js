@@ -1,4 +1,5 @@
 import axios from 'axios';
+import MernToast from '../utils/MernToast';
 
 const env = typeof import.meta !== 'undefined' ? import.meta.env : {};
 
@@ -25,6 +26,17 @@ api.interceptors.response.use(
   async (error) => {
     const isMetaRequest = error.config?.url?.includes('/api/meta');
     const originalRequest = error.config;
+
+    if (!error.response) {
+      MernToast('Cannot connect to backend server. Network error.', 'error');
+      return Promise.reject(error);
+    }
+
+    if (error.response?.status === 503) {
+      MernToast(error.response.data?.message || 'Database connection error.', 'error');
+    } else if (error.response?.status >= 500) {
+      MernToast(error.response.data?.message || 'Internal server error.', 'error');
+    }
 
     if (error.response?.status === 401 && !isMetaRequest && !originalRequest._retry) {
       // Try to refresh token if expired

@@ -6,14 +6,14 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 import api from './apiService';
-import toast from 'react-hot-toast';
+import MernToast from '../utils/MernToast';
 
 class FirebaseAuthService {
   
   // Sign in with Google
   async signInWithGoogle() {
     if (!auth) {
-      toast.error('Google authentication is not configured');
+      MernToast('Google authentication is not configured', 'error');
       throw new Error('Firebase Auth not initialized');
     }
     try {
@@ -42,7 +42,7 @@ class FirebaseAuthService {
       
     } catch (error) {
       console.error('Google sign-in error:', error);
-      toast.error(error.message || 'Google authentication failed');
+      MernToast(error.message || 'Google authentication failed', 'error');
       throw error;
     }
   }
@@ -53,10 +53,10 @@ class FirebaseAuthService {
     try {
       await signOut(auth);
       localStorage.removeItem('token');
-      toast.success('Signed out successfully');
+      MernToast('Signed out successfully');
     } catch (error) {
       console.error('Sign out error:', error);
-      toast.error('Failed to sign out');
+      MernToast('Failed to sign out', 'error');
       throw error;
     }
   }

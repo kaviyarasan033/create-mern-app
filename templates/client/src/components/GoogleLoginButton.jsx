@@ -19,15 +19,15 @@ const GoogleLoginButton = ({ onSuccess, onError, variant = 'outline-primary', si
   };
   
   return (
-    <Button 
-      variant={variant}
-      size={size}
-      className={`w-100 google-login-btn ${className}`}
+    <button 
+      type="button"
+      className={`w-100 btn text-white ${className}`}
+      style={{ backgroundColor: '#4285F4', padding: '0.8rem', borderRadius: '8px', fontWeight: '500', border: 'none' }}
       onClick={handleGoogleSignIn}
     >
       <FaGoogle className="me-2" />
       Continue with Google
-    </Button>
+    </button>
   );
 };
 
