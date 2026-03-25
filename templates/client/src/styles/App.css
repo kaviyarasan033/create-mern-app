@@ -1047,6 +1047,26 @@ textarea.form-control {
   }
 }
 
+.docs-hero-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.docs-focus-card {
+  background: var(--surface-2) !important;
+  border-color: var(--line-strong) !important;
+}
+
+.docs-login-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.docs-architecture-code {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 @media (max-width: 767px) {
   .auth-shell,
   .docs-container,
