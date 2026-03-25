@@ -16,4 +16,10 @@ router.post('/logout', AuthController.logout.bind(AuthController));
 // @route   GET api/auth/me
 router.get('/me', auth, AuthController.getCurrentUser.bind(AuthController));
 
+// @route   POST api/auth/refresh
+router.post('/refresh', auth, AuthController.refreshToken.bind(AuthController));
+
+// @route   POST api/auth/google
+router.post('/google', AuthController.googleAuth.bind(AuthController));
+
 module.exports = router;

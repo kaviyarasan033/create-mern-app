@@ -629,6 +629,45 @@ textarea.form-control {
   font-size: 0.96rem;
 }
 
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: var(--ink-500);
+  font-size: 0.9rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.auth-divider::before {
+  margin-right: 1rem;
+}
+
+.auth-divider::after {
+  margin-left: 1rem;
+}
+
+.google-login-btn {
+  border-color: #4285f4;
+  color: #4285f4;
+  transition: all 0.2s ease;
+}
+
+.google-login-btn:hover {
+  background-color: #4285f4;
+  color: white;
+}
+
+.google-login-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
 .dashboard-container {
   padding-top: 2.2rem;
 }

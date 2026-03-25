@@ -1,11 +1,13 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/apiService';
+import firebaseAuthService from '../services/firebaseAuth';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [firebaseUser, setFirebaseUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -14,6 +16,13 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
+    
+    // Listen for Firebase auth state changes
+    const unsubscribe = firebaseAuthService.onAuthStateChange((firebaseUser) => {
+      setFirebaseUser(firebaseUser);
+    });
+    
+    return unsubscribe;
   }, []);
 
   const checkAuth = async () => {
@@ -32,13 +41,26 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await firebaseAuthService.signOut();
+    } catch (error) {
+      console.error('Firebase sign out error:', error);
+    }
     localStorage.removeItem('token');
     setUser(null);
+    setFirebaseUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      firebaseUser,
+      login, 
+      logout, 
+      isAuthenticated: !!user 
+    }}>
       {children}
     </AuthContext.Provider>
   );

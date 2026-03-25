@@ -5,10 +5,12 @@ import { Form, Button, Card } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 import {
   FaArrowRight,
   FaCodeBranch,
   FaCopy,
+  FaGoogle,
   FaKey,
   FaLayerGroup,
   FaLock,
@@ -40,6 +42,15 @@ const Home = () => {
       },
       error: (err) => err.response?.data?.message || 'Login failed'
     });
+  };
+
+  const handleGoogleSuccess = (result) => {
+    login(result.token, result.user);
+    toast.success('Google authentication successful!');
+  };
+
+  const handleGoogleError = (error) => {
+    toast.error('Google authentication failed');
   };
 
   const copyCommand = async (value) => {
@@ -190,14 +201,25 @@ const Home = () => {
                   required
                 />
               </Form.Group>
-              <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
-                Sign In
-              </Button>
-            </Form>
-            <div className="auth-links">
-              <span>New here? <Link to="/register">Create an account</Link></span>
-              <Link to="/docs">Read starter docs</Link>
-            </div>
+               <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
+                 Sign In
+               </Button>
+             </Form>
+             
+             <div className="auth-divider">
+               <span>Or continue with</span>
+             </div>
+             
+             <GoogleLoginButton 
+               onSuccess={handleGoogleSuccess}
+               onError={handleGoogleError}
+               className="mb-3"
+             />
+             
+             <div className="auth-links">
+               <span>New here? <Link to="/register">Create an account</Link></span>
+               <Link to="/docs">Read starter docs</Link>
+             </div>
           </Card.Body>
         </Card>
       </motion.section>

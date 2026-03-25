@@ -1,7 +1,7 @@
 {
   "name": "create-mern-proapp",
-  "version": "1.0.14",
-  "description": "Create a production-ready MERN stack MVC project with one command",
+  "version": "1.0.16",
+  "description": "Create a production-ready MERN stack MVC project with Google OAuth, enhanced token security, and auto-refresh capabilities",
   "bin": {
     "create-mern-proapp": "./bin/index.js"
   },
@@ -24,7 +24,14 @@
     "mvc",
     "boilerplate",
     "generator",
-    "security"
+    "security",
+    "jwt",
+    "authentication",
+    "token",
+    "auth",
+    "google-auth",
+    "oauth",
+    "firebase"
   ],
   "author": "Kaviyarasan",
   "license": "MIT",

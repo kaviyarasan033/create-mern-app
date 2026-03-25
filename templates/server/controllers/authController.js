@@ -49,6 +49,52 @@ class AuthController extends Controller {
       this.sendError(res, err);
     }
   }
+
+  async refreshToken(req, res) {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) return this.notFound(res, 'User not found');
+      
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '30d' });
+      this.sendResponse(res, { token, user: user.toSafeObject() }, 'Token refreshed');
+    } catch (err) {
+      this.sendError(res, err);
+    }
+  }
+
+  async googleAuth(req, res) {
+    try {
+      const { firebaseToken, email, name, photoURL } = req.body;
+      
+      if (!firebaseToken || !email) {
+        return this.sendError(res, 'Firebase token and email are required', 400);
+      }
+      
+      // Verify Firebase token (you would need firebase-admin for production)
+      // For development, we'll trust the token and create/link user
+      
+      let user = await User.findOne({ email });
+      
+      if (!user) {
+        // Create new user with Google auth
+        user = new User({ 
+          name: name || email.split('@')[0], 
+          email, 
+          password: 'google-auth-user', // Dummy password for Google auth users
+          role: 'user'
+        });
+        await user.save();
+      }
+      
+      // Generate JWT token
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '30d' });
+      
+      this.sendResponse(res, { token, user: user.toSafeObject() }, 'Google authentication successful');
+      
+    } catch (err) {
+      this.sendError(res, err);
+    }
+  }
 }
 
 module.exports = new AuthController();

@@ -4,12 +4,21 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' }
+  password: { type: String, required: false }, // Optional for Google auth users
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  authProvider: { 
+    type: String, 
+    enum: ['local', 'google'], 
+    default: 'local' 
+  },
+  googleId: { type: String, sparse: true },
+  photoURL: { type: String }
 }, { timestamps: true });
 
 UserSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  // Skip password hashing for Google auth users without passwords
+  if (!this.isModified('password') || !this.password) return next();
+  
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();

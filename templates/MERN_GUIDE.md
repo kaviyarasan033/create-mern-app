@@ -12,6 +12,8 @@ This command gives you the MERN_Solution starter with the inbuilt MVC architectu
 ## 2. Run The Project
 
 ```bash
+npm run setup
+npm run setup:check
 npm run mern:start
 ```
 
@@ -21,6 +23,13 @@ Or separately:
 cd server && npm run dev
 cd client && npm run dev
 ```
+
+## 2A. Server Integrations
+
+- MongoDB remains the primary database for the built-in auth and starter MVC resources.
+- MySQL config is available for additional server-side services through `server/config/mysql.js`.
+- Firebase Admin config is available through `server/config/firebase.js`.
+- Run `npm run setup:check` to verify the current server env values before development.
 
 ## 3. Demo Login
 
@@ -37,6 +46,7 @@ cd server && npm run seed:demo
 - `POST /api/auth/login` - authenticate and receive a JWT
 - `POST /api/auth/logout` - clear client session state
 - `GET /api/auth/me` - return the current authenticated user
+- `POST /api/auth/refresh` - refresh expired JWT tokens
 - `GET /api/items` - list protected starter items
 - `POST /api/items` - create a protected starter item
 - `PUT /api/items/:id` - update a protected starter item
@@ -196,6 +206,37 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // Try to refresh token if expired
+      if (error.response.data?.message === 'Token expired') {
+        originalRequest._retry = true;
+        
+        try {
+          const refreshResponse = await api.post('/api/auth/refresh');
+          if (refreshResponse.data.success) {
+            localStorage.setItem('token', refreshResponse.data.data.token);
+            originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.data.token}`;
+            return api(originalRequest);
+          }
+        } catch (refreshError) {
+          localStorage.removeItem('token');
+          window.location.href = '/';
+        }
+      } else {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
 export default api;
 ```
 
@@ -269,7 +310,37 @@ function Projects() {
 export default Projects;
 ```
 
-## 10. Docs Page Content
+## 10. Authentication & Token Handling
+
+The MERN_Solution includes robust JWT token handling with Google OAuth support:
+
+### Authentication Options
+- **Local JWT Authentication**: Email/password with secure JWT tokens
+- **Google OAuth**: Firebase-powered Google authentication with automatic user creation
+- **Token Auto Refresh**: Automatic token refresh when expired
+- **Secure Token Validation**: Industry-standard Bearer token format
+
+### Token Flow
+- **Bearer Token Authentication**: Uses standard `Authorization: Bearer <token>` headers
+- **Auto Refresh**: Expired tokens are automatically refreshed via `/api/auth/refresh` endpoint
+- **Error Handling**: Differentiates between token expiration, invalid tokens, and missing tokens
+- **Google OAuth Integration**: Firebase tokens validated and converted to JWT
+
+### Security Features
+- **Helmet**: Security HTTP headers
+- **XSS Protection**: Prevents cross-site scripting attacks
+- **Rate Limiting**: Prevents API abuse
+- **NoSQL Injection Prevention**: Sanitizes MongoDB queries
+- **Firebase Security Rules**: Additional Firebase security layer
+
+### Token Endpoints
+- `POST /api/auth/login` - Get JWT token
+- `POST /api/auth/register` - Create new user account
+- `POST /api/auth/google` - Google OAuth authentication
+- `POST /api/auth/refresh` - Refresh expired token
+- `GET /api/auth/me` - Get current user with valid token
+
+## 11. Docs Page Content
 
 Open `/docs` in the client to view:
 

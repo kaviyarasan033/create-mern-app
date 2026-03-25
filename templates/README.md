@@ -29,6 +29,8 @@ This generator already gives you the MERN_Solution starter with the inbuilt MVC 
 ## Start The App
 
 ```bash
+npm run setup
+npm run setup:check
 npm run mern:start
 ```
 
@@ -38,6 +40,13 @@ Or run manually:
 cd server && npm run dev
 cd client && npm run dev
 ```
+
+## Server Integrations
+
+- MongoDB stays the default database for the built-in MERN auth and starter CRUD flow.
+- Optional server integrations are now included for Firebase Admin and MySQL configuration.
+- Use `server/config/firebase.js` for Firebase Admin access and `server/config/mysql.js` for MySQL pool access in custom services.
+- Validate your env setup with `npm run setup:check` before starting the app.
 
 ## Default Demo Login
 
@@ -71,6 +80,8 @@ node mern optimize:clear
 Cache helpers:
 
 ```bash
+npm run setup
+npm run setup:check
 npm run cache:clear
 npm run config:clear
 npm run optimize:clear

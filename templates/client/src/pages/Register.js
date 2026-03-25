@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { Form, Button, Card } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import api from '../services/apiService';
-import { FaCircleCheck, FaIdCard, FaUserPlus } from 'react-icons/fa6';
+import GoogleLoginButton from '../components/GoogleLoginButton';
+import { FaCircleCheck, FaGoogle, FaIdCard, FaUserPlus } from 'react-icons/fa6';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -28,6 +29,15 @@ const Register = () => {
       },
       error: (err) => err.response?.data?.message || 'Registration failed'
     });
+  };
+
+  const handleGoogleSuccess = (result) => {
+    toast.success('Account created with Google!');
+    navigate('/dashboard');
+  };
+
+  const handleGoogleError = (error) => {
+    toast.error('Google authentication failed');
   };
 
   return (
@@ -102,14 +112,25 @@ const Register = () => {
                   required
                 />
               </Form.Group>
-              <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
-                Create Account
-              </Button>
-            </Form>
-            <div className="auth-links">
-              <span>Already have an account? <Link to="/">Login</Link></span>
-              <span><FaIdCard /> MVC auth ready</span>
-            </div>
+               <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
+                 Create Account
+               </Button>
+             </Form>
+             
+             <div className="auth-divider">
+               <span>Or sign up with</span>
+             </div>
+             
+             <GoogleLoginButton 
+               onSuccess={handleGoogleSuccess}
+               onError={handleGoogleError}
+               className="mb-3"
+             />
+             
+             <div className="auth-links">
+               <span>Already have an account? <Link to="/">Login</Link></span>
+               <span><FaIdCard /> MVC auth ready</span>
+             </div>
           </Card.Body>
         </Card>
       </motion.div>

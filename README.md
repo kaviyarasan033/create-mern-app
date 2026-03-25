@@ -22,6 +22,8 @@ The generator already creates the full MERN_Solution starter with the inbuilt MV
 ## Run The Project
 
 ```bash
+npm run setup
+npm run setup:check
 npm run mern:start
 ```
 
@@ -32,6 +34,14 @@ cd server && npm run dev
 cd client && npm run dev
 ```
 
+## Server Env And Integrations
+
+- MongoDB is the default database for the built-in MERN starter flow.
+- The server template now includes optional Firebase Admin and MySQL config helpers.
+- Use `npm run setup` to install project dependencies and `npm run setup:check` to validate server env readiness.
+- Firebase keys live in `templates/server/.env.example`, and the helper is exposed through `templates/server/config/firebase.js`.
+- MySQL env values live in `templates/server/.env.example`, and the helper is exposed through `templates/server/config/mysql.js`.
+
 ## Demo Login
 
 ```bash
@@ -40,6 +50,34 @@ cd server && npm run seed:demo
 
 - Email: `demo@mernkit.dev`
 - Password: `Password123!`
+
+## Google OAuth Setup
+
+1. **Enable Firebase Authentication**: Go to Firebase Console → Authentication → Sign-in method → Enable Google
+2. **Configure Environment Variables**: Update `.env` files with your Firebase credentials
+3. **Client Configuration**: Update `client/.env` with Firebase client config
+4. **Server Configuration**: Update `server/.env` with Firebase Admin SDK credentials
+
+### Environment Variables
+
+**Client (.env):**
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+**Server (.env):**
+```env
+FIREBASE_ENABLED=true
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n
+```
 
 ## CLI Commands
 
@@ -123,6 +161,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
 });
 
+// Request interceptor for tokens
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
 
@@ -132,6 +171,38 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+// Response interceptor for token handling
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // Try to refresh token if expired
+      if (error.response.data?.message === 'Token expired') {
+        originalRequest._retry = true;
+        
+        try {
+          const refreshResponse = await api.post('/api/auth/refresh');
+          if (refreshResponse.data.success) {
+            localStorage.setItem('token', refreshResponse.data.data.token);
+            originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.data.token}`;
+            return api(originalRequest);
+          }
+        } catch (refreshError) {
+          localStorage.removeItem('token');
+          window.location.href = '/';
+        }
+      } else {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export default api;
 ```

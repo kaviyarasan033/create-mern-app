@@ -8,7 +8,7 @@ import Spinner from '../components/Spinner';
 import { FaArrowRotateRight, FaCirclePlus, FaCodeBranch, FaDatabase, FaShield, FaTrash } from 'react-icons/fa6';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, firebaseUser, logout } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', description: '', status: 'active' });
@@ -89,15 +89,22 @@ const Dashboard = () => {
                 <Button variant="outline-danger" className="nav-action-button" onClick={logout}>Logout</Button>
               </div>
             </div>
-            <div className="dashboard-stat-grid">
-              {dashboardStats.map((item) => (
-                <div key={item.label} className="hero-metric-card dashboard-metric-card">
-                  <div className="dashboard-metric-icon">{item.icon}</div>
-                  <span>{item.value}</span>
-                  <small>{item.label}</small>
-                </div>
-              ))}
-            </div>
+             <div className="dashboard-stat-grid">
+               {dashboardStats.map((item) => (
+                 <div key={item.label} className="hero-metric-card dashboard-metric-card">
+                   <div className="dashboard-metric-icon">{item.icon}</div>
+                   <span>{item.value}</span>
+                   <small>{item.label}</small>
+                 </div>
+               ))}
+               {firebaseUser && (
+                 <div className="hero-metric-card dashboard-metric-card">
+                   <div className="dashboard-metric-icon">🎯</div>
+                   <span>Google</span>
+                   <small>auth provider</small>
+                 </div>
+               )}
+             </div>
           </section>
 
           <Row className="g-4 mb-4">

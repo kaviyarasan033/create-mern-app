@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "setup": "node scripts/setup.js",
+    "setup:server": "npm install --prefix server",
+    "setup:client": "npm install --prefix client",
+    "setup:check": "node server/scripts/setupCheck.js",
     "mern:start": "node scripts/mernStart.js",
     "cache:clear": "node scripts/mernOptimizeClear.js cache:clear",
     "config:clear": "node scripts/mernOptimizeClear.js config:clear",

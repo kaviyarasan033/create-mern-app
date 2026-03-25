@@ -5,6 +5,8 @@ const sections = {
     'Frontend docs page: /docs'
   ],
   scripts: [
+    'npm run setup - install server and client dependencies from the project root',
+    'npm run setup:check - validate MongoDB, MySQL, and Firebase server env values',
     'npm run dev - start the backend in watch mode',
     'npm run cache:clear - clear backend/frontend runtime caches from the project root',
     'npm run config:clear - clear generated config cache folders',
@@ -24,7 +26,8 @@ const sections = {
     'node ../mern make:module project',
     'node ../mern cache:clear',
     'node ../mern config:clear',
-    'node ../mern optimize:clear'
+    'node ../mern optimize:clear',
+    'node ../mern help'
   ]
 };
 
