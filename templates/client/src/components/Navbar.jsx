@@ -26,7 +26,6 @@ const AppNavbar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mern-pro-nav-links mx-auto">
               <Nav.Link as={Link} to="/docs">Documentation</Nav.Link>
-              <Nav.Link href="https://github.com/kaviyarasan033/create-mern-app" target="_blank" rel="noopener noreferrer">GitHub</Nav.Link>
             </Nav>
 
             <Nav className="ms-auto align-items-center">

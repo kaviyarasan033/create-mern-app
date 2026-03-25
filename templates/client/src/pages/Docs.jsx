@@ -18,7 +18,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import MernToast from '../utils/MernToast';
 import api from '../services/apiService';
 import docsFallback from '../data/docsFallback';
-import MernCanvas from '../components/MernCanvas';
 import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -491,7 +490,6 @@ function Docs() {
   return (
     <div className="mern-pro-page">
       <header className="mern-pro-hero">
-        <MernCanvas />
         <div className="mern-pro-hero-content">
           <div className="mern-pro-title-logo">
             <span className="mern-pro-logo-icon" style={{fontSize: '1.2rem'}}><FaCube /></span> <strong>MERN Pro</strong>
