@@ -43,7 +43,7 @@ const docsFallback = {
     { name: 'ItemController', methods: 'index, store, update, destroy', purpose: 'Provides starter CRUD logic for protected data.' }
   ],
   frontendModules: [
-    { name: 'Landing + login page', file: 'client/src/pages/Home.js', purpose: 'Present MERN_Solution clearly while keeping login intact.' },
+    { name: 'Landing + login page', file: 'client/src/pages/Home.js', purpose: 'Present MERN Pro clearly while keeping login intact.' },
     { name: 'Developer docs workspace', file: 'client/src/pages/Docs.js', purpose: 'Render sections, commands, and architecture guidance responsively.' },
     { name: 'Responsive visual system', file: 'client/src/styles/App.css', purpose: 'Control layout, cards, spacing, forms, and docs presentation.' },
     { name: 'Navigation shell', file: 'client/src/components/Navbar.js', purpose: 'Guide users through docs, auth, and dashboard views.' }
@@ -61,7 +61,8 @@ const docsFallback = {
     { title: 'Clear cache', command: 'npm run cache:clear', description: 'Clear generated frontend and backend runtime caches.', category: 'Maintenance' },
     { title: 'Clear config cache', command: 'npm run config:clear', description: 'Clear generated config cache folders for the whole MERN app.', category: 'Maintenance' },
     { title: 'Optimize clear', command: 'npm run optimize:clear', description: 'Run both cache clear and config clear for frontend and backend.', category: 'Maintenance' },
-    { title: 'Build frontend', command: 'cd my-app/client && npm run build', description: 'Create a production frontend build.', category: 'Release' }
+    { title: 'Build frontend', command: 'cd my-app/client && npm run build', description: 'Create a production frontend build.', category: 'Release' },
+    { title: 'Upgrade system', command: 'npm run upgrade-system', description: 'Automated dependency and build health check.', category: 'Maintenance' }
   ],
   gettingStarted: [
     { title: 'Create project', command: 'npx create-mern-proapp my-app', description: 'Generate the starter and initial folder structure.' },
@@ -94,52 +95,38 @@ const docsFallback = {
   ],
   architectureFlow: [
     { title: 'Client layer', detail: 'Keep pages, hooks, services, and components separate so UI code stays readable.' },
-    { title: 'API layer', detail: 'Use one Axios service file for base URL, auth headers, and shared error handling.' },
+    { title: 'API layer', detail: 'Use one secure Fetch service file for base URL, auth headers, and shared error handling.' },
     { title: 'Server layer', detail: 'Expose resource logic through route, controller, and model files in MVC order.' },
     { title: 'Migration flow', detail: 'After generating or migrating a resource, connect model, controller, route, service, and page together.' }
   ],
   sampleArchitecture: `my-app/
   client/
     src/
+      api/
+        apiClient.js
+      assets/
+        styles/
+          App.css
+          MernPro.css
       components/
-        Navbar.js
-        ProtectedRoute.js
+        layout/
+          Navbar.js
+          ProtectedRoute.js
+        ui/
+          GoogleLoginButton.js
+          Spinner.js
       context/
         AuthContext.js
       hooks/
-        useProjects.js
       pages/
-        Home.js
-        Docs.js
-        Dashboard.js
-        Projects.js
+        Home.jsx
+        Docs.jsx
+        Dashboard.jsx
       services/
-        apiService.js
-        projectService.js
-      styles/
-        App.css
-  server/
-    controllers/
-      authController.js
-      ItemController.js
-      ProjectController.js
-      MetaController.js
-    middleware/
-      authMiddleware.js
-      errorMiddleware.js
-    models/
-      User.js
-      Item.js
-      Project.js
-    routes/
-      auth.js
-      api.js
-      projects.js
-      meta.js
-    scripts/
-      seedDemo.js
-    app.js
-    server.js`,
+        firebaseAuth.js
+      utils/
+        MernToast.js
+  server/`,
   sampleCommands: [
     { label: 'Generate', command: 'npx create-mern-proapp mern_solution' },
     { label: 'API', command: 'cd mern_solution/server && npm run dev' },
@@ -163,23 +150,28 @@ const docsFallback = {
   ],
   frontendSamples: [
     {
-      title: 'Axios base service',
-      description: 'Use one shared Axios instance for API requests and auth headers.',
-      code: `import axios from 'axios';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
-});
-
-api.interceptors.request.use((config) => {
+      title: 'Fetch base service',
+      description: 'Use a secure, native fetch wrapper for API requests and auth headers.',
+      code: `/**
+ * Secure Fetch API wrapper
+ * Standardized for auth, timeouts, and CSRF protection
+ */
+const api = async (url, options = {}) => {
   const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: \`Bearer \${token}\` } : {}),
+    ...options.headers,
+  };
 
-  if (token) {
-    config.headers.Authorization = \`Bearer \${token}\`;
-  }
+  const res = await fetch(\`\${import.meta.env.VITE_API_URL}\${url}\`, {
+    ...options,
+    headers,
+  });
 
-  return config;
-});
+  if (!res.ok) throw new Error(\`HTTP error! status: \${res.status}\`);
+  return res.json();
+};
 
 export default api;`
     },
@@ -333,7 +325,7 @@ app.use('/api/projects', projectRoutes);`
     { title: '2. Complete the model', detail: 'Add required fields, enums, relations, timestamps, and validation rules in the Mongoose schema.' },
     { title: '3. Complete the controller', detail: 'Implement index, store, update, and destroy so the API returns frontend-friendly JSON.' },
     { title: '4. Register the route', detail: 'Mount the new route in the Express app and apply auth middleware if the feature is protected.' },
-    { title: '5. Connect the client', detail: 'Create an Axios service, a custom hook, and a page or dashboard card that consumes the new endpoint.' },
+    { title: '5. Connect the client', detail: 'Create a Fetch service, a custom hook, and a page or dashboard card that consumes the new endpoint.' },
     { title: '6. Document the flow', detail: 'Add commands, route notes, and code samples to the docs page so other developers can use the module quickly.' }
   ],
   defaultLogin: {

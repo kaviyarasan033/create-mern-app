@@ -52,6 +52,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/items', apiRoutes);
 
 // Global Error Handler
+app.use((req, res, next) => {
+  const err = new Error(`Not Found - ${req.originalUrl}`);
+  res.status(404);
+  next(err);
+});
+
 app.use(errorHandler);
 
 module.exports = app;

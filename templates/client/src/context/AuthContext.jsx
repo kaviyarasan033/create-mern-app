@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import api from '../services/apiService';
+import api from '../api/apiClient';
 import firebaseAuthService from '../services/firebaseAuth';
 
 const AuthContext = createContext();

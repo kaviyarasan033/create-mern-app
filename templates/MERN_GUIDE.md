@@ -60,8 +60,8 @@ To test the authentication and dashboard flow immediately:
 ```bash
 cd server && npm run seed:demo
 ```
-- **Email**: `demo@mernkit.dev`
-- **Password**: `Password123!`
+- **Email**: `[EMAIL_ADDRESS]`
+- **Password**: `[PASSWORD]`
 
 ### Multi-Database Support
 - **MongoDB**: Primary database for Auth and MVC resources (Required).

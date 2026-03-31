@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const dbCheck = (req, res, next) => {
   const connection = process.env.DB_CONNECTION || 'mongodb';
 
+  if (process.env.APP_DEBUG === 'true') {
+    return next();
+  }
+
   if (connection === 'mongodb' && mongoose.connection.readyState !== 1) {
     return res.status(503).json({
       success: false,

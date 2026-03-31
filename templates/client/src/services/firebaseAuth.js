@@ -5,7 +5,7 @@ import {
   getIdToken
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
-import api from './apiService';
+import api from '../api/apiClient';
 import MernToast from '../utils/MernToast';
 
 class FirebaseAuthService {

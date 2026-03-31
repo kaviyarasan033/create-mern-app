@@ -156,7 +156,7 @@ const ${resourceName} = require('../models/${resourceName}');
 class ${resourceName}Controller extends Controller {
   async index(req, res) {
     try {
-      const records = await ${resourceName}.find().sort({ createdAt: -1 });
+      const records = await ${resourceName}.find();
       this.sendResponse(res, records, '${resourceName} list fetched successfully');
     } catch (err) {
       this.sendError(res, err);
@@ -165,9 +165,9 @@ class ${resourceName}Controller extends Controller {
 
   async show(req, res) {
     try {
-      const ${variableName} = await ${resourceName}.findById(req.params.id);
-      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
-      this.sendResponse(res, ${variableName}, '${resourceName} fetched successfully');
+      const record = await ${resourceName}.findById(req.params.id);
+      if (!record) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, record, '${resourceName} fetched successfully');
     } catch (err) {
       this.sendError(res, err);
     }
@@ -175,13 +175,8 @@ class ${resourceName}Controller extends Controller {
 
   async store(req, res) {
     try {
-      const ${variableName} = await ${resourceName}.create({
-        name: req.body.name,
-        description: req.body.description,
-        status: req.body.status
-      });
-
-      this.sendResponse(res, ${variableName}, '${resourceName} created successfully', 201);
+      const record = await ${resourceName}.create(req.body);
+      this.sendResponse(res, record, '${resourceName} created successfully', 201);
     } catch (err) {
       this.sendError(res, err);
     }
@@ -189,18 +184,9 @@ class ${resourceName}Controller extends Controller {
 
   async update(req, res) {
     try {
-      const ${variableName} = await ${resourceName}.findByIdAndUpdate(
-        req.params.id,
-        {
-          name: req.body.name,
-          description: req.body.description,
-          status: req.body.status
-        },
-        { new: true, runValidators: true }
-      );
-
-      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
-      this.sendResponse(res, ${variableName}, '${resourceName} updated successfully');
+      const record = await ${resourceName}.findByIdAndUpdate(req.params.id, req.body);
+      if (!record) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, record, '${resourceName} updated successfully');
     } catch (err) {
       this.sendError(res, err);
     }
@@ -208,9 +194,9 @@ class ${resourceName}Controller extends Controller {
 
   async destroy(req, res) {
     try {
-      const ${variableName} = await ${resourceName}.findByIdAndDelete(req.params.id);
-      if (!${variableName}) return this.notFound(res, '${resourceName} not found');
-      this.sendResponse(res, ${variableName}, '${resourceName} deleted successfully');
+      const record = await ${resourceName}.findByIdAndDelete(req.params.id);
+      if (!record) return this.notFound(res, '${resourceName} not found');
+      this.sendResponse(res, record, '${resourceName} deleted successfully');
     } catch (err) {
       this.sendError(res, err);
     }
@@ -220,7 +206,10 @@ class ${resourceName}Controller extends Controller {
 module.exports = new ${resourceName}Controller();`;
   },
 
-  model: (resourceName) => `const mongoose = require('mongoose');
+  model: (resourceName) => {
+    const tableName = toPlural(resourceName);
+    return `const mongoose = require('mongoose');
+const { getMySqlPool, isMySqlEnabled } = require('../config/mysql');
 
 const ${resourceName}Schema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -232,7 +221,71 @@ const ${resourceName}Schema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('${resourceName}', ${resourceName}Schema);`,
+const Mongo${resourceName} = mongoose.model('${resourceName}', ${resourceName}Schema);
+
+class ${resourceName}Model {
+  constructor() {
+    this.useSql = isMySqlEnabled();
+  }
+
+  async find(filter = {}) {
+    if (this.useSql) {
+      const pool = await getMySqlPool();
+      const [rows] = await pool.query('SELECT * FROM ${tableName} ORDER BY createdAt DESC');
+      return rows;
+    }
+    return await Mongo${resourceName}.find(filter).sort({ createdAt: -1 });
+  }
+
+  async findById(id) {
+    if (this.useSql) {
+      const pool = await getMySqlPool();
+      const [rows] = await pool.query('SELECT * FROM ${tableName} WHERE id = ?', [id]);
+      return rows[0];
+    }
+    return await Mongo${resourceName}.findById(id);
+  }
+
+  async create(data) {
+    if (this.useSql) {
+      const pool = await getMySqlPool();
+      const keys = Object.keys(data);
+      const values = Object.values(data);
+      const placeholders = keys.map(() => '?').join(', ');
+      const [result] = await pool.query(
+        \`INSERT INTO ${tableName} (\${keys.join(', ')}) VALUES (\${placeholders})\`,
+        values
+      );
+      return { id: result.insertId, ...data };
+    }
+    return await Mongo${resourceName}.create(data);
+  }
+
+  async findByIdAndUpdate(id, data) {
+    if (this.useSql) {
+      const pool = await getMySqlPool();
+      const keys = Object.keys(data);
+      const values = [...Object.values(data), id];
+      const setClause = keys.map(key => \`\${key} = ?\`).join(', ');
+      await pool.query(\`UPDATE ${tableName} SET \${setClause} WHERE id = ?\`, values);
+      return await this.findById(id);
+    }
+    return await Mongo${resourceName}.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async findByIdAndDelete(id) {
+    if (this.useSql) {
+      const pool = await getMySqlPool();
+      const record = await this.findById(id);
+      await pool.query('DELETE FROM ${tableName} WHERE id = ?', [id]);
+      return record;
+    }
+    return await Mongo${resourceName}.findByIdAndDelete(id);
+  }
+}
+
+module.exports = new ${resourceName}Model();`;
+  },
 
   middleware: (resourceName) => `const ${resourceName} = (req, res, next) => {
   next();

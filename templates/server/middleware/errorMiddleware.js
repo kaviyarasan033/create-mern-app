@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).json({
     success: false,
     message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+    stack: process.env.APP_DEBUG === 'true' || process.env.NODE_ENV !== 'production' ? err.stack : '🥞'
   });
 };
 

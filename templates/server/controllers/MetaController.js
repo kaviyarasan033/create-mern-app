@@ -102,7 +102,7 @@ class MetaController extends Controller {
       ],
       architectureFlow: [
         { title: 'Client layer', detail: 'Keep pages, hooks, services, and components separate so UI code stays readable.' },
-        { title: 'API layer', detail: 'Use one Axios service file for base URL, auth headers, and shared error handling.' },
+        { title: 'API layer', detail: 'Use one secure Fetch service file for base URL, auth headers, and shared error handling.' },
         { title: 'Server layer', detail: 'Expose resource logic through route, controller, and model files in MVC order.' },
         { title: 'Migration flow', detail: 'After generating or migrating a resource, connect model, controller, route, service, and page together.' }
       ],
@@ -171,23 +171,28 @@ class MetaController extends Controller {
       ],
       frontendSamples: [
         {
-          title: 'Axios base service',
-          description: 'Use one shared Axios instance for API requests and auth headers.',
-          code: `import axios from 'axios';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
-});
-
-api.interceptors.request.use((config) => {
+          title: 'Fetch base service',
+          description: 'Use a secure, native fetch wrapper for API requests and auth headers.',
+          code: `/**
+ * Secure Fetch API wrapper
+ * Standardized for auth, timeouts, and CSRF protection
+ */
+const api = async (url, options = {}) => {
   const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: \`Bearer \${token}\` } : {}),
+    ...options.headers,
+  };
 
-  if (token) {
-    config.headers.Authorization = \`Bearer \${token}\`;
-  }
+  const res = await fetch(\`\${import.meta.env.VITE_API_URL}\${url}\`, {
+    ...options,
+    headers,
+  });
 
-  return config;
-});
+  if (!res.ok) throw new Error(\`HTTP error! status: \${res.status}\`);
+  return res.json();
+};
 
 export default api;`
         },
@@ -341,7 +346,7 @@ app.use('/api/projects', projectRoutes);`
         { title: '2. Complete the model', detail: 'Add required fields, enums, relations, timestamps, and validation rules in the Mongoose schema.' },
         { title: '3. Complete the controller', detail: 'Implement index, store, update, and destroy so the API returns frontend-friendly JSON.' },
         { title: '4. Register the route', detail: 'Mount the new route in the Express app and apply auth middleware if the feature is protected.' },
-        { title: '5. Connect the client', detail: 'Create an Axios service, a custom hook, and a page or dashboard card that consumes the new endpoint.' },
+        { title: '5. Connect the client', detail: 'Create a Fetch service, a custom hook, and a page or dashboard card that consumes the new endpoint.' },
         { title: '6. Document the flow', detail: 'Add commands, route notes, and code samples to the docs page so other developers can use the module quickly.' }
       ],
       defaultLogin: {

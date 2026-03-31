@@ -53,9 +53,16 @@ async function getMySqlPool() {
   try {
     const connection = await pool.getConnection();
     connection.release();
-    logger.info('MySQL pool initialized');
+    if (process.env.APP_DEBUG === 'true') {
+      logger.info(`MySQL Connected: ${config.host}:${config.port}/${config.database}`);
+    } else {
+      logger.info('MySQL initialized successfully');
+    }
   } catch (error) {
-    logger.error(`MySQL connection error: ${error.message}`);
+    logger.error(`MySQL connection failed: ${error.message}`);
+    if (process.env.APP_DEBUG === 'true') {
+      logger.error(error.stack);
+    }
   }
 
   return pool;

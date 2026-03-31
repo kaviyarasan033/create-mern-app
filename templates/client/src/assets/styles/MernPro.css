@@ -2,8 +2,9 @@
 
 /* Typography & Base */
 .mern-pro-page {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--on-background);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
@@ -11,9 +12,9 @@
 
 /* Navbar */
 .premium-navbar.mern-pro-nav {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--background);
   backdrop-filter: blur(12px);
-  border-bottom: none;
+  border-bottom: 1px solid var(--outline);
   box-shadow: none;
   padding: 1rem 0;
 }
@@ -24,7 +25,7 @@
   gap: 0.5rem;
   font-size: 1.2rem;
   font-weight: 500;
-  color: #1f1f1f;
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -35,7 +36,7 @@
 .mern-pro-logo-icon {
   font-weight: 800;
   font-size: 1.4rem;
-  background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -49,7 +50,7 @@
 }
 
 .mern-pro-nav-links a {
-  color: #5f6368;
+  color: var(--on-surface-variant);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -57,12 +58,12 @@
 }
 
 .mern-pro-nav-links a:hover {
-  color: #202124;
+  color: var(--primary);
 }
 
 .btn-mern-pro-dark {
-  background-color: #1f1f1f !important;
-  color: #ffffff !important;
+  background-color: var(--primary) !important;
+  color: var(--on-primary) !important;
   border-radius: 999px !important;
   padding: 0.6rem 1.4rem !important;
   font-weight: 500 !important;
@@ -110,21 +111,21 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e8eaed;
+  border: 2px solid var(--outline);
 }
 
 .nav-avatar-fallback {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4285f4, #ea4335);
-  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 1.1rem;
-  border: 2px solid #e8eaed;
+  border: 2px solid var(--outline);
 }
 
 /* Hero Section */
@@ -203,7 +204,7 @@
 .docs-container.mern-pro-mode {
   position: relative;
   z-index: 2;
-  background: white;
+  background: var(--background);
   border-top-left-radius: 40px;
   border-top-right-radius: 40px;
   padding-top: 4rem;

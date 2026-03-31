@@ -1,4 +1,4 @@
-import '../styles/MernToast.css';
+import '../assets/styles/MernToast.css';
 
 export default function MernToast(message, type = "success", duration = 3000) {
 

@@ -1,0 +1,84 @@
+import React from 'react';
+import { Navbar, Container, Nav, Button, Dropdown } from 'react-bootstrap';
+import { motion } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
+import { FaBoxesStacked, FaRightFromBracket, FaCube, FaSun, FaMoon } from 'react-icons/fa6';
+import { useTheme } from '../../context/ThemeContext';
+import '../../assets/styles/MernPro.css';
+
+const AppNavbar = () => {
+  const { isAuthenticated, user, firebaseUser, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{ position: 'relative', zIndex: 100 }}
+    >
+      <Navbar expand="lg" className="premium-navbar mern-pro-nav" sticky="top">
+        <Container fluid className="px-4 px-lg-5">
+          <Navbar.Brand as={Link} to="/" className="mern-pro-brand">
+            <span className="mern-pro-logo-icon">M</span>
+            <span><strong>MERN</strong> Pro</span>
+          </Navbar.Brand>
+          
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mern-pro-nav-links mx-auto">
+              <Nav.Link as={Link} to="/docs">Documentation</Nav.Link>
+            </Nav>
+
+            <Nav className="ms-auto align-items-center">
+              <Button 
+                variant="link" 
+                className="theme-toggle-btn me-3 p-0 text-on-background shadow-none border-0" 
+                onClick={toggleTheme}
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
+              </Button>
+
+              {isAuthenticated ? (
+                <Dropdown align="end" className="user-dropdown">
+                  <Dropdown.Toggle as="div" className="user-avatar-toggle" style={{ cursor: 'pointer' }}>
+                    {firebaseUser?.photoURL ? (
+                      <img src={firebaseUser.photoURL} alt="User Avatar" className="nav-avatar" />
+                    ) : (
+                      <div className="nav-avatar-fallback">
+                        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                    )}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="shadow-sm border-0 mt-2 rounded-3">
+                    <div className="px-3 py-2 border-bottom mb-2">
+                      <strong className="d-block">{user?.name || firebaseUser?.displayName || 'User'}</strong>
+                      <small className="text-muted d-block text-truncate" style={{ maxWidth: '180px' }}>
+                        {user?.email || firebaseUser?.email || 'user@example.com'}
+                      </small>
+                    </div>
+                    <Dropdown.Item as={Link} to="/dashboard"><FaBoxesStacked className="me-2 text-muted" /> Dashboard</Dropdown.Item>
+                    <Dropdown.Item onClick={logout} className="text-danger mt-1">
+                      <FaRightFromBracket className="me-2" /> Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : (
+                <Nav.Link as={Link} to="/register" className="p-0">
+                  <Button className="btn-mern-pro-dark">
+                    Get Started
+                  </Button>
+                </Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </motion.div>
+  );
+};
+
+export default AppNavbar;
